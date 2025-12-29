@@ -13,9 +13,9 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import './App.css'
+// NOTE: the file is unoptmised, run it through js'fier
 
-// NOTE: Save your logo file as src/assets/playstorm-logo.png
-// and uncomment the import below once the file exists.
+
 import playstormLogo from './assets/logo.png'
  
 
