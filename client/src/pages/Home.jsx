@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, Gamepad2, Users, Trophy, Instagram, Linkedin, Server, Copy, Check, Activity, Zap, MapPin, Calendar, Youtube, FileText, Lock, Sparkles } from 'lucide-react'
+import { ArrowRight, Gamepad2, Users, Trophy, Instagram, Linkedin, Server, Copy, Check, Activity, Zap, MapPin, Calendar, Youtube, FileText, Lock, Sparkles, Pin, Heart, MessageCircle, Play, ExternalLink, Grid } from 'lucide-react'
 import ConfettiButton from '../components/ConfettiButton'
 import FloatingParticles from '../components/FloatingParticles'
 import playstormLogo from '../assets/logo.png'
@@ -9,8 +9,10 @@ import lineupsPoster from '../assets/lineups_poster.webp'
 import arenaBgmi from '../assets/arena_bgmi1.webp'
 import arenaValo from '../assets/arena_valo1.webp'
 import arenaExperience from '../assets/arena_experience1.webp'
-import minecraftSmpBg from '../assets/minecraft_smp.webp'
-import minecraftBedwarsBg from '../assets/minecraft_bedwars.webp'
+import bgmiBg from '../assets/bgmi_bg.webp'
+import parkourImg from '../assets/parkour1.1.webp'
+import arena1Img from '../assets/arena1.webp'
+import season3Poster from '../assets/season3_poster.png'
 
 // --- ANIMATED COMPONENTS ---
 
@@ -91,56 +93,88 @@ function DiscordPill() {
   )
 }
 
-function MinecraftServerCard({ title, ip, type, lastRestart = "2 hours ago", bgImage }) {
-  const [copied, setCopied] = useState(false)
-  const handleCopy = () => {
-    navigator.clipboard.writeText(ip)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+function InstaReelCard({ title, tag, isPinned, views, likes, comments, bgImage, linkUrl, thumbnailUrl, instaShortcode }) {
+  const [imgSrc, setImgSrc] = useState(thumbnailUrl || bgImage)
+  const [isInView, setIsInView] = useState(false)
+  const cardRef = useRef(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsInView(entry.isIntersecting)
+    }, { threshold: 0.3 })
+
+    if (cardRef.current) observer.observe(cardRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-900/15 to-black/50 p-5 backdrop-blur-sm transition hover:border-emerald-500/50">
-      {bgImage && (
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <img
-            src={bgImage}
-            alt=""
-            aria-hidden="true"
-            loading="eager"
-            className="h-full w-full object-cover opacity-60 transition duration-700 group-hover:opacity-75"
+    <div
+      ref={cardRef}
+      className="group relative block h-[500px] w-full overflow-hidden rounded-2xl border border-white/10 bg-black transition-all duration-500 hover:border-pink-500/50 shadow-xl"
+    >
+      {/* Instagram Embed iframe (loads when in view) — INTERACTIVE */}
+      {instaShortcode && isInView ? (
+        <div className="absolute inset-0 w-full h-full">
+          <iframe
+            src={`https://www.instagram.com/reel/${instaShortcode}/embed/`}
+            width="100%"
+            height="100%"
+            className="absolute inset-0 w-full h-full border-none"
+            title={title}
+            loading="lazy"
+            allowTransparency="true"
+            allow="encrypted-media"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/50" />
+          {/* Gradient overlay at bottom for text readability */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+        </div>
+      ) : (
+        <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="absolute inset-0">
+          {/* Static thumbnail fallback */}
+          <img
+            src={imgSrc}
+            alt={title}
+            onError={() => setImgSrc(bgImage)}
+            className="absolute inset-0 w-full h-full object-cover opacity-70 transition-transform duration-700 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent group-hover:via-black/50 transition-all duration-300" />
+        </a>
+      )}
+
+      {/* Top Overlay Bar */}
+      <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20 pointer-events-none">
+        <div className="flex items-center gap-1.5 rounded-full bg-black/60 border border-white/10 px-3 py-1 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-white shadow-lg">
+          {isPinned ? <Pin className="w-3 h-3 text-pink-400 animate-pulse" /> : <Sparkles className="w-3 h-3 text-yellow-400" />}
+          <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">{tag}</span>
+        </div>
+        <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="rounded-full bg-black/60 border border-white/10 p-2 text-white backdrop-blur-md transition-transform duration-300 hover:scale-110 hover:bg-gradient-to-tr hover:from-yellow-500 hover:via-pink-500 hover:to-purple-600 hover:border-transparent shadow-lg pointer-events-auto">
+          <Instagram className="w-4 h-4" />
+        </a>
+      </div>
+
+      {/* Center Hover Play Button (only when NOT embedded) */}
+      {!isInView && (
+        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100">
+          <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-[0_0_30px_rgba(236,72,153,0.5)] border border-white/20 backdrop-blur-md">
+            <Play className="w-4 h-4 fill-current" /> Watch Reel
+          </div>
         </div>
       )}
-      <div className="relative z-10 flex justify-between items-start">
-        <div>
-          <div className="flex items-center gap-2">
-            <Server className="w-4 h-4 text-emerald-400" />
-            <h3 className="font-bold text-white">{title}</h3>
+
+      {/* Bottom Info Overlay */}
+      <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-4 z-20 space-y-3 transform transition-transform duration-300 group-hover:translate-y-[-4px]">
+        <h3 className="font-display text-lg font-bold text-white leading-snug tracking-wide line-clamp-2 drop-shadow-md">{title}</h3>
+        
+        <div className="flex items-center justify-between pt-3 border-t border-white/15 text-xs text-gray-300 backdrop-blur-sm rounded-xl bg-black/30 p-2.5 border border-white/5">
+          <div className="flex items-center gap-3 font-medium">
+            <span className="flex items-center gap-1 text-pink-400"><Heart className="w-3.5 h-3.5 fill-current" /> {likes}</span>
+            <span className="flex items-center gap-1 text-purple-300"><MessageCircle className="w-3.5 h-3.5 fill-current" /> {comments}</span>
           </div>
-          <p className="mt-1 text-xs font-semibold text-emerald-300">{type}</p>
-        </div>
-        <button
-          onClick={handleCopy}
-          className="rounded-lg bg-emerald-500/15 p-2 text-emerald-400 hover:bg-emerald-500 hover:text-white transition"
-        >
-          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-        </button>
-      </div>
-      <div className="mt-4 flex items-center gap-2 rounded bg-black/40 px-3 py-2 font-mono text-xs text-emerald-400 border border-emerald-500/25">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        {ip}
-      </div>
-      <div className="mt-3 pt-3 border-t border-emerald-500/15 text-xs">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-gray-400">System Status:</span>
-            <span className="text-emerald-400 font-semibold">Online</span>
+          <div className="flex items-center gap-1 font-mono text-[11px] text-gray-400 font-semibold">
+            <Play className="w-3 h-3 fill-current text-gray-400" /> {views}
           </div>
-          <span className="text-emerald-300 text-right">Version {lastRestart}</span>
         </div>
-      </div>
+      </a>
     </div>
   )
 }
@@ -225,6 +259,8 @@ function EventPreviewCard({ title, date, tag, description, linkTo, isClosed = fa
 
 export default function HomePage() {
   const [discordMembers, setDiscordMembers] = useState(null);
+  const [instaData, setInstaData] = useState(null);
+  const [isInstaLoading, setIsInstaLoading] = useState(true);
 
   useEffect(() => {
     const GUILD_ID = '1399021796359016550';
@@ -232,6 +268,20 @@ export default function HomePage() {
       .then(res => res.json())
       .then(data => setDiscordMembers(data.presence_count))
       .catch(err => console.log("Discord widget err"));
+
+    // Fetch live Instagram feed & stats
+    fetch('/api/instagram')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.success) {
+          setInstaData(data);
+        }
+        setIsInstaLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to fetch live Instagram data:", err);
+        setIsInstaLoading(false);
+      });
   }, []);
 
   return (
@@ -284,24 +334,39 @@ export default function HomePage() {
             </div>
           </motion.div>
 
-          {/* Hero Visual */}
+          {/* Hero Visual - Season 3 Banner */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative hidden lg:block"
           >
-            <Link to="/lineups" className="relative z-10 block overflow-hidden rounded-3xl border border-white/10 bg-black/60 shadow-2xl backdrop-blur-sm transition-transform hover:scale-[1.02] hover:border-purple-500/50">
-              <img src={lineupsPoster} alt="Playstorm Competitive Lineups" className="w-full object-cover opacity-80 transition-opacity hover:opacity-100" />
-              <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-white/10 bg-black/30 p-4 backdrop-blur-md transition-all duration-300 group-hover:bg-black/40">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex-1">
-                    <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#FF2D55] mb-0.5">OPEN TRIALS</div>
-                    <div className="text-sm font-semibold tracking-wide text-white">Trials Are Live</div>
+            <Link to="/s3" className="group relative block overflow-hidden rounded-3xl border border-purple-500/40 bg-black/40 shadow-2xl backdrop-blur-sm transition-all hover:scale-[1.02] hover:border-purple-400/60">
+              <div className="flex flex-col">
+                <div className="w-full overflow-hidden">
+                  <img src={season3Poster} alt="PlayStorm Season 3" className="w-full h-[260px] object-cover object-top transition-transform duration-500 group-hover:scale-105" />
+                </div>
+                <div className="p-8 space-y-4">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white animate-pulse">🔥 Upcoming</span>
+                    <span className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-yellow-300">Dates TBA</span>
                   </div>
-                  <div className="text-right">
-                    <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-purple-300 mb-0.5">RECRUITMENT</div>
-                    <div className="text-sm font-semibold tracking-wide text-white tracking-widest">OPEN</div>
+                  <h3 className="font-display text-3xl font-bold text-white">PlayStorm Season 3</h3>
+                  <p className="text-sm text-gray-400 leading-relaxed">Multi-title online esports showdown — Valorant, BGMI, Clash Royale, Tekken 8 & FC 26. ₹1,10,000 prize pool.</p>
+                  
+                  <div className="flex flex-wrap gap-4 pt-2 border-t border-white/10 mt-4">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Prize Pool</span>
+                      <span className="text-sm font-semibold text-purple-300">₹1.1L</span>
+                    </div>
+                    <div className="flex flex-col border-l border-white/10 pl-4">
+                      <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Games</span>
+                      <span className="text-sm font-semibold text-gray-300">5 Titles</span>
+                    </div>
+                  </div>
+
+                  <div className="inline-flex items-center justify-center gap-2 w-full mt-4 rounded-xl bg-purple-500/10 border border-purple-500/30 px-4 py-3 text-xs font-bold uppercase tracking-widest text-purple-300 group-hover:bg-purple-500/20 transition">
+                    View Details & Register <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
               </div>
@@ -313,7 +378,99 @@ export default function HomePage() {
       {/* 2. MARQUEE BANNER */}
       <Marquee text="IT'S GIVING MAIN CHARACTER ENERGY • JOIN THE DISCORD • NO CAP BEST GAMING CLUB • FOLLOW @PLAYSTORM.AMITY • WE'RE SO BACK" />
 
-      {/* 3. GAME ROSTER */}
+      {/* 3. INSTAGRAM CREATIVE SHOWCASE */}
+      <Section id="instagram" className="px-4 max-w-7xl mx-auto w-full">
+        <div className="relative overflow-hidden rounded-3xl border border-pink-500/20 bg-gradient-to-b from-purple-950/20 via-black/60 to-black p-6 sm:p-10 backdrop-blur-xl shadow-[0_0_50px_rgba(236,72,153,0.1)] space-y-8">
+          {/* Subtle background glow */}
+          <div className="absolute top-0 right-1/4 -z-10 h-96 w-96 bg-pink-600/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 -z-10 h-96 w-96 bg-purple-600/10 blur-[120px] rounded-full pointer-events-none" />
+
+          {/* Instagram Profile Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-8 border-b border-white/10">
+            <div className="flex items-center gap-5">
+              <div className="relative flex-shrink-0">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 animate-spin-slow blur-sm opacity-70" />
+                <div className="relative p-1 bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 rounded-full">
+                  <img src={playstormLogo} alt="Playstorm Amity" className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover bg-black p-1" />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h2 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
+                    {instaData?.profile?.username || "playstorm.amity"}
+                  </h2>
+                  {instaData?.profile?.verified && (
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white text-[10px] font-bold shadow-md shadow-blue-500/20">✓</span>
+                  )}
+                </div>
+                <p className="text-xs text-gray-400 flex items-center gap-1.5">
+                  <MapPin className="w-3 h-3 text-pink-400 flex-shrink-0" /> {instaData?.profile?.name || "Official eSports Club of Amity University, Noida"}
+                </p>
+                <div className="flex items-center gap-4 pt-1 text-xs font-semibold text-gray-300">
+                  <span><strong className="text-white font-bold">{isInstaLoading ? "..." : instaData?.profile?.posts || 113}</strong> posts</span>
+                  <span><strong className="text-white font-bold">{isInstaLoading ? "..." : instaData?.profile?.followers || 999}</strong> followers</span>
+                  <span><strong className="text-white font-bold">{isInstaLoading ? "..." : instaData?.profile?.following || 16}</strong> following</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <a
+                href="https://www.instagram.com/playstorm.amity/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-yellow-500 via-pink-500 to-purple-600 p-[2px] transition-transform hover:scale-105 shadow-lg shadow-pink-500/20"
+              >
+                <span className="flex items-center gap-2 rounded-full bg-black px-6 py-3 text-xs sm:text-sm font-bold uppercase tracking-widest text-white transition-colors group-hover:bg-transparent">
+                  <Instagram className="w-4 h-4" /> Follow @playstorm.amity
+                </span>
+              </a>
+            </div>
+          </div>
+
+          {/* Reels & Posts Grid */}
+          <div>
+            <div className="flex items-center gap-2 mb-6 text-sm font-bold uppercase tracking-widest text-gray-300 border-b border-white/10 pb-4">
+              <Grid className="w-4 h-4 text-pink-400" /> Pinned & Trending Reels
+            </div>
+            {isInstaLoading ? (
+              <div className="py-16 text-center text-sm text-pink-400/70 animate-pulse border border-white/5 rounded-2xl bg-white/[0.02]">
+                Connecting to live Instagram API...
+              </div>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-3">
+                {(instaData?.reels || [
+                  {
+                    id: "reel_1", title: "1st time at Amity University… and we turned it into a battleground. 🎮🔥", tag: "Pinned • BGMI", isPinned: true, views: "18.5K", likes: "1,240", comments: "94", bgImage: bgmiBg, linkUrl: "https://www.instagram.com/p/DVSxy1mgfrs/", thumbnailUrl: "https://scontent-cdg4-2.cdninstagram.com/v/t51.71878-15/641243296_2031604577385739_6630750860363136602_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-cdg4-2.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2gGS_JPJraNk6zXATyrJJ0jzUxvyrhq1y7o3qRnP9JJgl75OqMzkePuF_MYiKvE4d_U&_nc_ohc=7pOtOOn-VYgQ7kNvwFds0oF&_nc_gid=7GSj2C4ab2ozt0gPWSv-4A&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af7fvKHi4WZNkB5EarY3RY25J2CMC_3cfkvYKjRP6AXsGQ&oe=6A0F720D&_nc_sid=10d13b", instaShortcode: "DVSxy1mgfrs"
+                  },
+                  {
+                    id: "reel_2", title: "Hehe 😛 non gamers ko bhi gamer bana dege 🤙🏻", tag: "👑 Most Viewed • Viral", isPinned: false, views: "35.4K", likes: "1,240", comments: "41", bgImage: parkourImg, linkUrl: "https://www.instagram.com/p/DWOuSkYCUVo/", thumbnailUrl: "https://scontent-cdg4-2.cdninstagram.com/v/t51.71878-15/656005972_2130352561065097_2109240251605278924_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-cdg4-2.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gH284QLa4G6oZGa5VS7IF3w4ADCSchbdYrhkE6_a9RSi6a5IFj5VNvcBS-9W1cNwjo&_nc_ohc=BWQ2oZWhfIMQ7kNvwHsUc3o&_nc_gid=GLeKiJM4QYkboscXWHPIEw&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af6w94My3tctDSed_THntcJ2hyCdXtPhk75b2WL28rY1eg&oe=6A0F64C6&_nc_sid=10d13b", instaShortcode: "DWOuSkYCUVo"
+                  },
+                  {
+                    id: "reel_3", title: "The only crazy event at amity 🔥", tag: "Trending • POV", isPinned: false, views: "14.2K", likes: "1,240", comments: "84", bgImage: arena1Img, linkUrl: "https://www.instagram.com/p/DVS-ZrMAQ_u/", thumbnailUrl: "https://scontent-cdg4-1.cdninstagram.com/v/t51.71878-15/639746797_3870868599885278_566304567590951049_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-cdg4-1.cdninstagram.com&_nc_cat=102&_nc_oc=Q6cZ2gGWRwXzwK6mmPtQOcXbgFRu7OreV1n5JX7EjUMhC8jBL_Zdq2zRYkGsHdQS3RY2muU&_nc_ohc=N6y8BGQj14sQ7kNvwFwapnN&_nc_gid=jiRH0Nc2vSJ3vGyO5yopQg&edm=APs17CUBAAAA&ccb=7-5&oh=00_Af4HvhSdug_IOScSmU-mCUH3T8fUMjRjG6F1f7m8-XPMAA&oe=6A0F5106&_nc_sid=10d13b", instaShortcode: "DVS-ZrMAQ_u"
+                  }
+                ]).map((reel, idx) => (
+                  <InstaReelCard
+                    key={reel.id || idx}
+                    title={reel.title}
+                    tag={reel.tag}
+                    isPinned={reel.isPinned}
+                    views={reel.views}
+                    likes={reel.likes}
+                    comments={reel.comments}
+                    bgImage={idx === 0 ? bgmiBg : idx === 1 ? parkourImg : arena1Img}
+                    linkUrl={reel.linkUrl || "https://www.instagram.com/playstorm.amity/"}
+                    thumbnailUrl={reel.thumbnailUrl}
+                    instaShortcode={reel.instaShortcode}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </Section>
+
+      {/* 4. GAME ROSTER */}
       <Section id="games" className="px-4">
         <div className="flex items-end justify-between mb-8">
           <div>
@@ -329,21 +486,6 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* 4. MINECRAFT SERVERS */}
-      <Section id="minecraft" className="px-4">
-        <div className="mb-8">
-          <p className="font-display text-[11px] uppercase tracking-[0.26em] text-emerald-400">Official Minecraft Servers</p>
-          <h2 className="font-display text-xl text-white sm:text-2xl">Join the PlayStorm SMP</h2>
-          <p className="max-w-2xl text-sm text-gray-400 mt-2">
-            Server stays online 24/7. Join the grind, build with the squad. ⛏️
-          </p>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2">
-          <MinecraftServerCard title="PlayStorm SMP" ip="mc.playstorm.world" type="Survival • 1.21.x" lastRestart="v1.21.1" bgImage={minecraftSmpBg} />
-          <MinecraftServerCard title="PvP Arena" ip="pvp.playstorm.world:6017" type="PvP • 1.8 - 1.21" lastRestart="Active" bgImage={minecraftBedwarsBg} />
-        </div>
-      </Section>
-
       {/* 5. EVENTS */}
       <Section id="events" className="px-4">
         <div className="mb-6 space-y-2">
@@ -351,16 +493,16 @@ export default function HomePage() {
           <h2 className="font-display text-xl text-white sm:text-2xl">Recent Events ✨</h2>
         </div>
         <div className="grid gap-5 md:grid-cols-3">
-          <EventPreviewCard title="#Respawn" date="Mar 12" tag="LAN" description="PlayStorm × Happiness Club multi-game showdown." linkTo="/events" />
-          <EventPreviewCard title="The Pro Arena" date="Feb 19-28" tag="Major" description="Our flagship championship featuring BGMI, Valorant, and the Experience Zone." linkTo="/events" />
-          <EventPreviewCard title="Season 2 Finals" date="Feb 5" tag="LAN" description="Multi-game tournament series wrapped up successfully." linkTo="/events" />
+          <EventPreviewCard title="#Respawn" date="Mar 12" tag="LAN" description="PlayStorm × Happiness Club collab. 300+ footfall. BGMI, FC25 & Tekken 8 tournaments." linkTo="/events" />
+          <EventPreviewCard title="The Pro Arena" date="Feb 27-28" tag="Major" description="281 players, 65 teams, 1,500+ footfall. BGMI & Valorant LAN championship at E2 Auditorium." linkTo="/pro-arena" />
+          <EventPreviewCard title="Season 2 Finals" date="Feb 5" tag="LAN" description="Multi-title tournament: Valorant, BGMI, Clash Royale, CODM & Tekken on finale day." linkTo="/events" />
         </div>
 
         {/* SOCIAL LINKS ROW */}
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/40 px-5 py-4 text-xs text-gray-200">
           <div><p className="font-display text-[11px] uppercase tracking-[0.22em] text-purple-200">Connect</p></div>
           <div className="flex flex-wrap items-center gap-3">
-            <a href="https://discord.playstorm-amity.club" target="_blank" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-3 py-1.5 text-[11px] uppercase tracking-[0.2em] text-white">
+            <a href="https://discord.gg/eAqXkxgTF" target="_blank" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-3 py-1.5 text-[11px] uppercase tracking-[0.2em] text-white">
               <DiscordPill />
               Discord {discordMembers && <span className="ml-1 opacity-70">({discordMembers})</span>}
             </a>

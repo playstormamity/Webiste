@@ -17,11 +17,11 @@ export default defineConfig({
   },
   server: {
     host: "0.0.0.0",
-    port: 9000,
+    port: 5173,
     allowedHosts: ["playstorm.world", "www.playstorm.world", "localhost", "127.0.0.1"], // allow local dev
     proxy: {
       '/api': {
-        target: 'http://localhost:9000',
+        target: 'http://127.0.0.1:9000',
         changeOrigin: true,
       },
     },

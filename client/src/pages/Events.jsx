@@ -23,6 +23,7 @@ import arena1Poster from '../assets/arena1.webp'
 import arenaBgmiPoster from '../assets/arena_bgmi1.webp'
 import arenaValorantPoster from '../assets/arena_valo1.webp'
 import arenaExperiencePoster from '../assets/arena_experience1.webp'
+import season3Poster from '../assets/season3_poster.png'
 
 // --- SHARED HEADER ---
 function PageHeader({ eyebrow, title, description }) {
@@ -35,10 +36,11 @@ function PageHeader({ eyebrow, title, description }) {
   )
 }
 
-// --- FEATURED EVENT CARD (Current Event) ---
-function WeeklyWarsSpotlight() {
+// --- FEATURED EVENT CARD (Upcoming Season 3) ---
+function Season3EventSpotlight() {
   return (
-    <div
+    <Link
+      to="/s3"
       className="group relative block overflow-hidden rounded-2xl border border-purple-500/30 bg-black/50 p-6 md:p-10 shadow-2xl shadow-purple-900/20"
     >
       <div className="absolute -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-purple-600/20 blur-[120px]" />
@@ -46,68 +48,71 @@ function WeeklyWarsSpotlight() {
 
       <div className="relative z-10 grid gap-8 md:grid-cols-[1.4fr,1fr] items-center">
         <div className="space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 px-3 py-1 text-[10px] font-bold uppercase tracking-widest">
-            <span className="relative flex h-2 w-2">
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-            </span>
-            Registrations Open
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 px-3 py-1 text-[10px] font-bold uppercase tracking-widest">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-400"></span>
+              </span>
+              Upcoming
+            </div>
+            <span className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-yellow-300">Dates TBA</span>
           </div>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-gray-400">PlayStorm Weekly Series</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-gray-400">PlayStorm Esports Club</p>
             <h3 className="font-display text-4xl md:text-5xl text-white mt-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-br from-purple-500 to-pink-500">Weekly Wars: BGMI Clash</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-br from-purple-500 to-pink-500">Season 3</span>
             </h3>
             <p className="text-gray-300 text-sm md:text-base leading-relaxed mt-3">
-              A high-intensity BGMI Battle Royale tournament streamed live with Discord coordination and YouTube coverage.
+              The biggest inter-college online esports tournament by PlayStorm. 5 game titles — Valorant, BGMI, Clash Royale, Tekken 8 & EA FC 26. ₹1,10,000 total prize pool. Open to all college students across India.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-6 text-sm font-medium text-gray-300">
             <div className="flex items-center gap-2">
               <CalendarDays className="w-4 h-4 text-purple-400" />
-              <span>April 4-5, 2026</span>
+              <span>Dates TBA</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-purple-400" />
-              <span>Online - Discord & YouTube</span>
+              <span>Online (Discord)</span>
             </div>
             <div className="flex items-center gap-2">
               <Trophy className="w-4 h-4 text-purple-400" />
-              <span>BGMI Battle Royale Only</span>
+              <span>₹1,10,000 Prize Pool</span>
             </div>
           </div>
 
-          <Link
-            to="/register"
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white border border-purple-400/40 hover:brightness-110 transition"
-          >
-            Register Now <ArrowRight className="w-4 h-4" />
-          </Link>
+          <div className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-all">
+            View Details & Register <ArrowRight className="w-4 h-4" />
+          </div>
         </div>
 
         <div className="hidden md:block border-l border-white/10 pl-8">
           <div className="space-y-6">
             <div className="space-y-1">
               <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Organizers</p>
-              <p className="text-white">PlayStorm eSports Club</p>
+              <p className="text-white">PlayStorm Esports Club</p>
             </div>
             <div className="space-y-1">
               <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Venue</p>
-              <p className="text-white">Online (Discord & YouTube)</p>
+              <p className="text-white">Online (Discord)</p>
             </div>
             <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Games</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Game Titles</p>
               <div className="flex flex-wrap gap-2 pt-1">
-                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">BGMI Battle Royale</span>
-                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">Discord</span>
-                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">YouTube Live</span>
+                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">Valorant</span>
+                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">BGMI</span>
+                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">Clash Royale</span>
+                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">Tekken 8</span>
+                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">EA FC 26</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 
@@ -349,28 +354,40 @@ FIFA — Pratham Sethi`,
       monthLabel: "Sep 2025",
       timelineOrder: 20250924,
       isMajor: true,
-      summary: "Series I began with the Tekken 8 LAN and expanded into inter-college collaborations and multi-game tournaments.",
-      description: "PlayStorm Series I introduced structured esports on campus and scaled into LANs and inter-college collaborations.",
+      summary: "8-week gaming night series (645 cumulative participants) + Tekken 8 LAN + Inter-College Valorant (300+ viewers) + BGMI tournaments.",
+      description: `PlayStorm Series I marked the official launch of structured esports at Amity. It ran from September through December 2025, combining 8 weeks of themed Gaming Nights (645 cumulative participants) with competitive tournaments.
+
+The Gaming Nights were hosted on the official Playstorm Discord Server with event-specific channels, registration forms, and game VCs. Titles included Among Us, Valorant, BGMI, Minecraft, Monopoly, and MOBA — blending casual fun with esports scouting.
+
+Key outcomes: 400+ unique participants, launch of PlayStorm's official 24/7 Minecraft SMP Server, identification of top talent for college lineups, and a foundation for future inter-university competitions.
+
+Management Team: Mayank Khatri (Head Coordinator), Ashraful Zeya (Discord Mod), Jorish (Discord Manager), plus dedicated hosts for each game title.`,
       cover: null,
       images: [],
       subEvents: [
         {
-          title: "PlayStorm Series I: Inaugural LAN (Tekken 8)",
+          title: "Gaming Nights (8 Weeks)",
+          date: "Sep - Oct 2025",
+          venue: "Online (Discord VC)",
+          highlights: "645 cumulative participants across 8 themed weeks. Among Us, Valorant, BGMI, Minecraft SMP launch, Monopoly, MOBA. Season finale with 150 players."
+        },
+        {
+          title: "Tekken 8 Inaugural LAN",
           date: "Sep 25, 2025 · 2:00 PM - 5:00 PM",
-          venue: "Room E3-316, Amity University, Noida",
-          highlights: "Series I launch + community meet-and-greet. Double-elimination bracket. Champion: Jorish after a finale rematch with Kavya Sejwal."
+          venue: "Room E3-316, Amity University",
+          highlights: "Double-elimination bracket. Champion: Jorish defeated Kavya Sejwal 2-0 in Grand Finale. ~20 participants."
         },
         {
-          title: "PlayStorm Series I: Valorant (Inter-College)",
-          date: "Nov 1-2, 2025 · 4:00 PM - 10:00 PM",
+          title: "Valorant Inter-College Scrims",
+          date: "Aug 1-2, 2025 · 4:00 PM - 10:00 PM",
           venue: "Online",
-          highlights: "8 teams, 300+ live viewers. Knockout format (Bo2) with casters and moderators. Winners: Team Rocket (Amity)."
+          highlights: "5 colleges (IIT Ranchi, DY Patil, MSI Delhi, NIT Delhi, Amity). 8 teams, 300+ viewers, knockout Bo2 with casters. Winners: Team Rocket (Amity)."
         },
         {
-          title: "PlayStorm Series I: BGMI Tournaments",
+          title: "BGMI Tournaments",
           date: "Nov 29-30, 2025",
           venue: "Inter-College + Intra-College",
-          highlights: "Event A: Inter-Collegiate. Event B: Intra-College (16 teams)."
+          highlights: "Event A: Inter-Collegiate. Event B: Intra-College (16 teams). Strong competitive play and talent identification."
         }
       ]
     },
@@ -382,8 +399,14 @@ FIFA — Pratham Sethi`,
       monthLabel: "Jan 2026",
       timelineOrder: 20260111,
       isMajor: true,
-      summary: "A multi-week season with competitive phases across Valorant, BGMI, and community staples, ending with finale day events on Feb 5.",
-      description: "PlayStorm Season 2 ran across multiple phases in January and February, mixing competitive brackets with community favorites.",
+      summary: "Multi-week season: Valorant & BGMI brackets, Clash Royale (50+ players), CODM, Among Us community night, and LAN finale day on Feb 5.",
+      description: `PlayStorm Series II / Season 2 ran from January 11 to February 5, 2026 with competitive phases across multiple titles.
+
+On Jan 17-18, the BGMI & Valorant Tournament featured intense two-day competition. Valorant ran through RO16 → Quarterfinals → Semifinals & Finals (Bo3). BGMI had 6 matches (3 per day) with leaderboard-based scoring.
+
+The Clash Royale Tournament attracted 50+ participants in structured knockout rounds — one of the most engaging mobile gaming events by the club.
+
+Highlights: Competitive Valorant rounds with clutch plays, strategic BGMI matches with tight point races, exceptional sportsmanship throughout.`,
       cover: season2Poster,
       images: [],
       subEvents: [
@@ -440,34 +463,86 @@ FIFA — Pratham Sethi`,
     {
       title: "The Pro Arena",
       linkTo: "/pro-arena",
-      date: "Feb 19 - Feb 28, 2026",
+      date: "Feb 27-28, 2026",
       tag: "Major Event",
       status: "Completed",
       monthLabel: "Feb 2026",
       timelineOrder: 2026022801,
       isMajor: true,
-      summary: "PlayStorm's major championship featuring BGMI, Valorant, and Experience Zone as key event tracks.",
-      description: "The Pro Arena was the headline major event with multi-format competition and live experience activations.",
+      summary: "281 registered players, 65 teams, 1,500+ footfall. BGMI & Valorant LAN at E2 Auditorium under Amity Youth Fest 2026. 10 PC setups, 9 PS5s, racing simulator.",
+      description: `The Pro Arena, held Feb 27-28 at E2 Auditorium under Amity Youth Fest 2026, was PlayStorm's flagship championship.
+
+281 participants across 65 teams (44 BGMI, 21 Valorant). Total footfall exceeded 1,500 attendees including players, spectators, and Experience Zone visitors.
+
+Infrastructure: 10 gaming PC setups with monitors/peripherals for Valorant, 9 PS5 consoles + 1 racing simulator, dedicated LAN network by university IT.
+
+BGMI Winners: W2R Esports (Kyansh Malik, Krrish Malik, Yatharth Tyagi, Aaditya Siddhant Kain). MVP: Yatharth Tyagi (Bennett University).
+Valorant Winners: Armaros (Lakshay Lamba, Aditya K Binu, Rahul, Aryan Bhatnagar, Ayushman Chaudhary). MVP: Lakshay Lamba.
+
+Post-event celebration: Star Night ft. Harrdy Sandhu.`,
       cover: arena1Poster,
       images: [arena1Poster, arenaBgmiPoster, arenaValorantPoster, arenaExperiencePoster],
       subEvents: [
         {
-          title: "BGMI",
-          date: "Feb 19 - Feb 28, 2026",
-          venue: "Online Qualifiers + LAN Finals",
-          highlights: "Major-event BGMI bracket under The Pro Arena."
+          title: "BGMI LAN Championship",
+          date: "Feb 27-28, 2026",
+          venue: "E2 Auditorium (LAN)",
+          highlights: "44 teams. Winner: W2R Esports. Runner-up: Demon. MVP: Yatharth Tyagi (Bennett University). Volunteers monitored every team for fair play."
         },
         {
-          title: "Valorant",
-          date: "Feb 19 - Feb 28, 2026",
-          venue: "Online Qualifiers + LAN Finals",
-          highlights: "Major-event Valorant bracket under The Pro Arena."
+          title: "Valorant LAN Championship",
+          date: "Feb 27-28, 2026",
+          venue: "E2 Auditorium (10 PC Setups)",
+          highlights: "21 teams. Winner: Armaros. Runner-up: 10th Symphony. MVP: Lakshay Lamba (MSI). No third-party software monitoring by volunteers."
         },
         {
           title: "Experience Zone",
-          date: "Feb 19 - Feb 28, 2026",
-          venue: "On-ground Activation",
-          highlights: "Interactive experience zone as part of The Pro Arena showcase."
+          date: "Feb 27-28, 2026",
+          venue: "E2 Back Hall",
+          highlights: "9 PS5 consoles + racing simulator. Tekken 8, FC 26, F1, Street Fighter 6, Mortal Kombat 1. Open to all attendees."
+        }
+      ]
+    },
+    {
+      title: "#Respawn Event",
+      date: "Mar 12, 2026",
+      tag: "PlayStorm x Happiness Club",
+      status: "Completed",
+      monthLabel: "Mar 2026",
+      timelineOrder: 2026031200,
+      isMajor: true,
+      summary: "A collaborative event dedicated to celebrating the month of Happiness, fostering community well-being through interactive play. 300+ students experienced BGMI 4v4 TDM, FC25 1v1, and Tekken 8 knockout bracket.",
+      description: `A collaborative event dedicated to celebrating the month of Happiness, fostering community well-being through interactive play. 
+
+300+ students experienced BGMI 4v4 TDM (10 squads), FC25 1v1, and Tekken 8 knockout bracket (70 participants — the most engaging segment). First-ever PlayStorm × Happiness Club collab!
+
+Organizers: PlayStorm & Happiness Club
+Venue: On-Campus
+Highlights:
+- BGMI 🏆 No Mercy (Saad Khan)
+- FC25 🏆 Kavya Sejwal (12-4)
+- Tekken 🏆 Maumik Raj
+- 300+ Footfall`,
+      cover: null,
+      images: [],
+      subEvents: [
+        {
+          title: "BGMI 4v4 TDM",
+          date: "Mar 12, 2026",
+          venue: "On-Campus",
+          highlights: "10 squads. Winner: No Mercy (Saad Khan)."
+        },
+        {
+          title: "FC25 1v1",
+          date: "Mar 12, 2026",
+          venue: "On-Campus",
+          highlights: "Winner: Kavya Sejwal (12-4)."
+        },
+        {
+          title: "Tekken 8 Knockout",
+          date: "Mar 12, 2026",
+          venue: "On-Campus",
+          highlights: "70 participants. Winner: Maumik Raj."
         }
       ]
     }
@@ -475,14 +550,36 @@ FIFA — Pratham Sethi`,
 
   const communityEvents = [
     {
-      title: "#Respawn Event",
-      date: "March 5, 2026",
-      tag: "Special Event",
+      title: "#Respawn: Tekken 8 Knockout",
+      date: "Mar 12, 2026",
+      tag: "Tekken 8",
       status: "Completed",
       monthLabel: "Mar 2026",
-      timelineOrder: 2026030501,
+      timelineOrder: 2026031203,
       isMajor: false,
-      description: "#Respawn Event marked a packed community day with strong participation and high-energy matchups across featured titles.",
+      description: "The most engaging and high-energy segment of the #Respawn event! 70 participants went head-to-head in a fast-paced knockout bracket on console setups. The on-campus crowd energy was unmatched throughout the bracket. Winner: Maumik Raj.",
+      images: []
+    },
+    {
+      title: "#Respawn: FC25 1v1",
+      date: "Mar 12, 2026",
+      tag: "FC25",
+      status: "Completed",
+      monthLabel: "Mar 2026",
+      timelineOrder: 2026031202,
+      isMajor: false,
+      description: "Intense head-to-head virtual football action on PlayStation setups. Players showcased incredible skill and tactical gameplay in front of a live audience. Winner: Kavya Sejwal with a dominating 12-4 victory in the finals.",
+      images: []
+    },
+    {
+      title: "#Respawn: BGMI 4v4 TDM",
+      date: "Mar 12, 2026",
+      tag: "BGMI",
+      status: "Completed",
+      monthLabel: "Mar 2026",
+      timelineOrder: 2026031201,
+      isMajor: false,
+      description: "10 competitive squads battled it out in fast-paced 4v4 Team Deathmatch rounds. The mobile gaming segment brought massive engagement to the venue with thrilling close-range combat. Winner: Team No Mercy (Saad Khan).",
       images: []
     },
     {
@@ -493,7 +590,7 @@ FIFA — Pratham Sethi`,
       monthLabel: "Feb 2026",
       timelineOrder: 2026022802,
       isMajor: false,
-      description: "Mobile battle royale tournament with online qualifiers leading to LAN finals at E2 Auditorium. Prize pool: ₹50,000.",
+      description: "44 teams competing in mobile battle royale. LAN finals at E2 Auditorium with volunteer-monitored fair play. Winner: W2R Esports (Kyansh Malik, Krrish Malik, Yatharth Tyagi, Aaditya Siddhant Kain). Runner-up: Demon. MVP: Yatharth Tyagi (Bennett University). Prize: ₹30K winner / ₹20K runner-up.",
       images: [arenaBgmiPoster]
     },
     {
@@ -504,7 +601,7 @@ FIFA — Pratham Sethi`,
       monthLabel: "Feb 2026",
       timelineOrder: 2026022803,
       isMajor: false,
-      description: "5v5 tactical FPS tournament featuring top college teams. Online qualifiers followed by LAN finals. Prize pool: ₹40,000.",
+      description: "21 teams in 5v5 tactical FPS on 10 PC setups with 240Hz monitors. Winner: Armaros (Lakshay Lamba, Aditya K Binu, Rahul, Aryan Bhatnagar, Ayushman Chaudhary). Runner-up: 10th Symphony. MVP: Lakshay Lamba (MSI). Prize: ₹25K winner / ₹15K runner-up.",
       images: [arenaValorantPoster]
     },
     {
@@ -519,14 +616,14 @@ FIFA — Pratham Sethi`,
       images: [arenaExperiencePoster]
     },
     {
-      title: "PlayStorm Series I: Valorant (Inter-College)",
-      date: "Nov 1-2, 2025",
+      title: "Valorant Inter-College Scrims",
+      date: "Aug 1-2, 2025",
       tag: "Tournament",
       status: "Completed",
-      monthLabel: "Nov 2025",
-      timelineOrder: 20251102,
+      monthLabel: "Aug 2025",
+      timelineOrder: 20250802,
       isMajor: false,
-      description: "Online Valorant tournament to foster inter-college esports with IIT Ranchi, DY Patil, MSI Delhi, NIT Delhi, and Amity. 8 teams, 300+ live viewers, knockout Bo2, with casters and moderators for a professional broadcast. Minor connectivity issues were managed by the ops team. Winners: Team Rocket (Amity) — Aayan Basharat, Bhavya Suryan, Arav Tonger, Divyansh Yadav, Chaitannya.",
+      description: "Inter-college Valorant tournament with IIT Ranchi, DY Patil, MSI Delhi, NIT Delhi & Amity. 8 teams, 300+ live viewers via Discord streaming. Knockout Bo2 format with dedicated casters and moderators. Casual mini-games (Codenames, Among Us) between matches kept the audience engaged. Winners: Team Rocket (Amity) — Aayan Basharat, Bhavya Suryan, Arav Tonger, Divyansh Yadav, Chaitannya.",
       images: []
     },
     {
@@ -549,7 +646,7 @@ FIFA — Pratham Sethi`,
       timelineOrder: 20250930,
       isMajor: false,
       clickable: false,
-      description: "8 weeks of themed nights: Among Us, Valorant, BGMI, Minecraft, Monopoly, MOBA.",
+      description: "8-week series with 645 cumulative participants. Week 1: Among Us + Valorant (80). Week 2: BGMI + MOBA (60). Week 3: Monopoly + BGMI (70). Week 4: Valorant Tourney (40). Week 5: Among Us + Minecraft (90). Week 6: Valorant Tryouts (80). Week 7: BGMI Showdown (75). Week 8: Season Finale — all games + Minecraft SMP launch (150).",
       images: []
     },
     {
@@ -560,7 +657,7 @@ FIFA — Pratham Sethi`,
       monthLabel: "Oct 2025",
       timelineOrder: 20251018,
       isMajor: false,
-      description: "Intra-college 4v4 tournament with 10 teams.",
+      description: "Intra-college 4v4 TDM tournament with 10 teams (4-6 players each). Competitive bracket on Discord with scheduled matches.",
       images: []
     },
     {
@@ -571,7 +668,7 @@ FIFA — Pratham Sethi`,
       monthLabel: "Nov 2025",
       timelineOrder: 20251122,
       isMajor: false,
-      description: "PlayStorm Amity won Valorant finals 2-0. Jorish placed 2nd Runner Up in Tekken.",
+      description: "PlayStorm sent 2 Valorant lineups + 1 Tekken player (11 students total) to the external Vortex Campus Showdown at Sector 128, Noida. Both Amity Valorant teams reached the finals — Team PlayStorm Amity defeated Team Rocket 2-0 for the championship. Jorish achieved 2nd Runner Up in Tekken. A landmark moment proving Amity's esports representation externally.",
       images: []
     },
     {
@@ -582,7 +679,7 @@ FIFA — Pratham Sethi`,
       monthLabel: "Nov 2025",
       timelineOrder: 20251130,
       isMajor: false,
-      description: "50+ participants. Winner: Himanshu Singh.",
+      description: "50+ participants in structured knockout rounds — one of the most engaging mobile gaming competitions by the club. Players competed with strategic gameplay, quick decision-making, and competitive sportsmanship. Winner: Himanshu Singh.",
       images: []
     },
     {
@@ -593,7 +690,7 @@ FIFA — Pratham Sethi`,
       monthLabel: "Nov 2025",
       timelineOrder: 20251130,
       isMajor: false,
-      description: "Event A: Inter-Collegiate. Event B: Intra-College (16 teams).",
+      description: "Event A (Nov 29): Inter-Collegiate BGMI tournament with multiple college teams demonstrating advanced gameplay mechanics and strategic planning. Event B (Nov 30): Intra-College tournament with 16 teams in an action-packed bracket.",
       images: []
     },
     {
@@ -604,7 +701,7 @@ FIFA — Pratham Sethi`,
       monthLabel: "Dec 2025",
       timelineOrder: 20251227,
       isMajor: false,
-      description: "Community 2v2 showdown with a best-of-3 format.",
+      description: "Intra-college 2v2 Valorant tournament with 12 teams. Best-of-3 format. Structured competitive environment that improved teamwork, communication, and in-game decision-making.",
       images: [valo2v2Poster]
     },
     {
@@ -626,7 +723,7 @@ FIFA — Pratham Sethi`,
       monthLabel: "Dec 2025",
       timelineOrder: 20251227,
       isMajor: false,
-      description: "Fast-paced CODM tournament hosted on Discord. One-hour bracket that kept the lobby packed and competitive throughout the night.",
+      description: "Inter-collegiate CODM tournament with ~60 students from multiple colleges. Featured Free-for-All mode alongside standard matches. High standard of competitive play with frequent momentum shifts and last-moment eliminations. Helped identify top talent for future esports representation.",
       images: []
     },
     {
@@ -648,7 +745,18 @@ FIFA — Pratham Sethi`,
       monthLabel: "Jan 2026",
       timelineOrder: 20260118,
       isMajor: false,
-      description: "Two-day Phase 1 bracket for BGMI. Online (Advanced Room Card).",
+      description: "PlayStorm Series II two-day BGMI & Valorant bracket. Valorant: RO16 → Quarterfinals → Semifinals & Finals (Bo3). BGMI: 6 matches (3/day) with leaderboard scoring. Competitive rounds with clutch plays and tight point races.",
+      images: []
+    },
+    {
+      title: "BGMI Inter-College Tournament",
+      date: "Jan 3, 2026",
+      tag: "BGMI · Inter-College",
+      status: "Completed",
+      monthLabel: "Jan 2026",
+      timelineOrder: 20260103,
+      isMajor: false,
+      description: "Inter-college BGMI tournament with 18 teams competing in custom rooms. Professional and semi-professional teams proved their skills, teamwork, and strategy in a high-pressure competitive environment.",
       images: []
     },
     {
@@ -739,7 +847,7 @@ FIFA — Pratham Sethi`,
 
       {/* 1. SPOTLIGHT EVENT */}
       <section>
-        <WeeklyWarsSpotlight />
+        <Season3EventSpotlight />
       </section>
 
       {/* 2. PAST EVENTS LIST */}

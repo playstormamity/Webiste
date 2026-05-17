@@ -7,7 +7,7 @@ import './App.css'
 import Layout from './components/Layout'
 import LoadingScreen from './components/LoadingScreen'
 import ScrollToTop from './components/ScrollToTop'
-import MusicPlayer from './components/MusicPlayer'
+
 
 // --- NEW VISUAL EFFECTS ---
 import { CursorTrackerBackground, ParticleBackground } from './components/VisualEffects'
@@ -20,9 +20,21 @@ import EventsPage from './pages/Events'
 import LeaderboardPage from './pages/Leaderboard'
 import ContactPage from './pages/Contact'
 import RegisterPage from './pages/Register'
-import LineupsPage from './pages/Lineups' // Added Lineups
+import LineupsPage from './pages/Lineups'
 import NotFound from './pages/NotFound'
-import ProArenaPage from './pages/ProArena' // Imported ProArena
+import ProArenaPage from './pages/ProArena'
+import Season3Page from './pages/Season3'
+import AdminAuthPage from './pages/AdminAuth'
+
+// --- ADMIN PROTECTED ROUTE WRAPPER ---
+import { Navigate } from 'react-router-dom'
+const AdminRoute = ({ children }) => {
+  const isAdmin = localStorage.getItem('isAdmin') === 'true'
+  if (!isAdmin) {
+    return <Navigate to="/admin" replace />
+  }
+  return children
+}
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -46,7 +58,7 @@ function App() {
       <ParticleBackground />
 
       {/* 3. GLOBAL AUDIO */}
-      <MusicPlayer />
+
       
       {/* 4. LOADING SCREEN ANIMATION */}
       <AnimatePresence mode="wait">
@@ -61,13 +73,17 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/roster" element={<RosterPage />} />
             <Route path="/events" element={<EventsPage />} />
-            <Route path="/leaderboard" element={<LeaderboardPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/lineups" element={<LineupsPage />} />
+            <Route path="/s3" element={<Season3Page />} />
             <Route path="/contact" element={<ContactPage />} />
             
-            {/* NEW ROUTE FOR PRO ARENA */}
-            <Route path="/pro-arena" element={<ProArenaPage />} />
+            {/* ADMIN-ONLY ROUTES */}
+            <Route path="/leaderboard" element={<AdminRoute><LeaderboardPage /></AdminRoute>} />
+            <Route path="/register" element={<AdminRoute><RegisterPage /></AdminRoute>} />
+            <Route path="/lineups" element={<AdminRoute><LineupsPage /></AdminRoute>} />
+            <Route path="/pro-arena" element={<AdminRoute><ProArenaPage /></AdminRoute>} />
+            
+            {/* ADMIN LOGIN ROUTE */}
+            <Route path="/admin" element={<AdminAuthPage />} />
             
             {/* 404 Route - Catch all unknown links */}
             <Route path="*" element={<NotFound />} />

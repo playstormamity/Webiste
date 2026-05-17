@@ -113,7 +113,7 @@ export default function ProArena() {
 
           <p className="mx-auto max-w-2xl text-sm sm:text-base md:text-lg text-gray-400 font-light tracking-wide px-2">
             The largest inter-university esports championship in North India.
-            <span className="text-white font-bold block mt-2">Registrations are closed. Battle begins soon.</span>
+            <span className="text-white font-bold block mt-2">281 players · 65 teams · 1,500+ footfall · ₹95K prize pool</span>
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 pt-4 md:pt-6">
@@ -136,28 +136,29 @@ export default function ProArena() {
         <div className="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-3 max-w-6xl mx-auto px-4">
           <PrizeCard
             game="BGMI"
-            winner="₹30,000"
-            runnerUp="₹20,000"
+            winner="W2R Esports"
+            runnerUp="Demon"
             icon={Target}
             color="yellow"
           />
           <PrizeCard
             game="VALORANT"
-            winner="₹25,000"
-            runnerUp="₹15,000"
+            winner="Armaros"
+            runnerUp="10th Symphony"
             icon={Swords}
             color="red"
           />
           <div className="flex flex-col gap-6">
             <div className="flex-1 rounded-2xl border border-blue-500/20 bg-blue-900/10 p-6 flex flex-col justify-center items-center text-center">
               <Crown className="h-8 w-8 text-blue-400 mb-3 md:mb-4" />
-              <div className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-blue-300">MVP Award</div>
-              <div className="font-display text-2xl md:text-3xl font-bold text-white mt-1 md:mt-2">₹2,500 each</div>
+              <div className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-blue-300">MVP Awards</div>
+              <div className="font-display text-lg md:text-xl font-bold text-white mt-1 md:mt-2">BGMI: Yatharth Tyagi</div>
+              <div className="font-display text-lg md:text-xl font-bold text-white">VAL: Lakshay Lamba</div>
             </div>
             <div className="flex-1 rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col justify-center items-center text-center">
               <Gamepad2 className="h-8 w-8 text-purple-400 mb-3 md:mb-4" />
               <div className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-purple-300">Experience Zone</div>
-              <div className="text-xs md:text-sm text-gray-400 mt-1 md:mt-2">Merch & Vouchers</div>
+              <div className="text-xs md:text-sm text-gray-400 mt-1 md:mt-2">9 PS5s + Racing Simulator</div>
             </div>
           </div>
         </div>
@@ -193,21 +194,21 @@ export default function ProArena() {
                     <MapPin className="text-purple-500 w-4 h-4 md:w-5 md:h-5" />
                     <h4 className="font-bold text-white text-sm md:text-base">E2 Auditorium</h4>
                   </div>
-                  <p className="text-xs md:text-sm text-gray-400 pl-7 md:pl-8 leading-relaxed">Main Stage for Grand Finals. 600+ Seating Capacity. Live Broadcasting.</p>
+                  <p className="text-xs md:text-sm text-gray-400 pl-7 md:pl-8 leading-relaxed">Main Stage for Grand Finals. 10 PC setups + dedicated LAN network. 1,500+ footfall across 2 days.</p>
                 </div>
                 <div className="rounded-xl border border-white/10 bg-black/40 p-5 md:p-6">
                   <div className="flex items-center gap-3 mb-2">
                     <MapPin className="text-pink-500 w-4 h-4 md:w-5 md:h-5" />
                     <h4 className="font-bold text-white text-sm md:text-base">E2 Back Hall</h4>
                   </div>
-                  <p className="text-xs md:text-sm text-gray-400 pl-7 md:pl-8 leading-relaxed">Experience Zone featuring PS5s.</p>
+                  <p className="text-xs md:text-sm text-gray-400 pl-7 md:pl-8 leading-relaxed">Experience Zone: 9 PS5 consoles + 1 racing simulator. Tekken 8, FC 26, F1, Street Fighter 6, Mortal Kombat 1.</p>
                 </div>
                 <div className="rounded-xl border border-white/10 bg-black/40 p-5 md:p-6">
                   <div className="flex items-center gap-3 mb-2">
                     <Zap className="text-yellow-500 w-4 h-4 md:w-5 md:h-5" />
                     <h4 className="font-bold text-white text-sm md:text-base">Tech Partners</h4>
                   </div>
-                  <p className="text-xs md:text-sm text-gray-400 pl-7 md:pl-8 leading-relaxed">Powered by top tier hardware. High-end rigs and 240Hz monitors provided.</p>
+                  <p className="text-xs md:text-sm text-gray-400 pl-7 md:pl-8 leading-relaxed">10 gaming PCs with 240Hz monitors, high-end peripherals. Dedicated LAN tested by university IT team.</p>
                 </div>
               </div>
             </div>

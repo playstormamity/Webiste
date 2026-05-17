@@ -73,8 +73,7 @@ export default function Contact() {
     setIsSubmitting(true)
     setSubmitStatus(null)
 
-    // Using the webhook from your code snippet
-    const webhookUrl = 'https://discord.com/api/webhooks/1454357101295046771/sEQ_2hIGFtnhHlxkNoNaT-umvSewMfx7eukFITcmqx_MeHCAiGzbqZkLQIefp9D-_tn8'
+    // The webhook URL is now securely stored on the backend
 
     const embed = {
       title: '🎮 New Contact Form Submission',
@@ -91,10 +90,15 @@ export default function Contact() {
     }
 
     try {
-      const response = await fetch(webhookUrl, {
+      const payload = { embeds: [embed] }
+
+      const response = await fetch('/api/register-discord', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ embeds: [embed] }),
+        body: JSON.stringify({
+          game: 'contact',
+          payload: payload
+        }),
       })
 
       if (response.ok) {
@@ -249,7 +253,7 @@ export default function Contact() {
             </h3>
             <div className="mt-3 flex flex-wrap gap-3">
               <a
-                href="https://discord.playstorm-amity.club/"
+                href="https://discord.gg/eAqXkxgTF"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-gray-100 hover:border-purple-400 transition"

@@ -4,13 +4,20 @@ import { Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import playstormLogo from '../assets/logo.png'
 
+const isAdmin = localStorage.getItem('isAdmin') === 'true'
+
 const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/roster', label: 'Roster' },
-  { to: '/lineups', label: 'Lineups' },
+  ...(isAdmin ? [
+    { to: '/lineups', label: 'Lineups' },
+    { to: '/leaderboard', label: 'Leaderboard' },
+    { to: '/register', label: 'Register' },
+    { to: '/pro-arena', label: 'Pro Arena' }
+  ] : []),
   { to: '/events', label: 'Events' },
-  { to: '/leaderboard', label: 'Leaderboard' },
+  { to: '/s3', label: 'Season 3' },
   { to: '/contact', label: 'Contact' },
 ]
 
@@ -64,8 +71,9 @@ export default function Layout({ children }) {
                   [
                     'relative px-1 py-1 text-xs uppercase tracking-[0.18em] transition-colors',
                     isActive ? 'text-purple-300' : 'text-gray-300 hover:text-white',
-                    // Highlight PRO ARENA - Removed gradient, now solid Pink-400
-                    link.label === 'PRO ARENA' ? 'font-bold text-pink-400 hover:text-pink-300' : ''
+                    // Highlight PRO ARENA and Season 3
+                    link.label === 'PRO ARENA' ? 'font-bold text-pink-400 hover:text-pink-300' : '',
+                    link.label === 'Season 3' ? 'font-bold text-purple-400 hover:text-purple-300' : ''
                   ].join(' ')
                 }
               >
@@ -79,6 +87,17 @@ export default function Layout({ children }) {
                 )}
               </NavLink>
             ))}
+            {isAdmin && (
+              <button
+                onClick={() => {
+                  localStorage.removeItem('isAdmin')
+                  window.location.href = '/'
+                }}
+                className="ml-2 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-red-400 hover:bg-red-500/20 transition"
+              >
+                Logout
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Toggle Button */}
@@ -117,6 +136,17 @@ export default function Layout({ children }) {
                     {link.label}
                   </NavLink>
                 ))}
+                {isAdmin && (
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem('isAdmin')
+                      window.location.href = '/'
+                    }}
+                    className="w-full text-left text-sm font-bold uppercase tracking-[0.2em] py-3 border-b border-white/5 text-red-400 hover:text-red-300 transition-colors"
+                  >
+                    Logout
+                  </button>
+                )}
               </div>
             </motion.div>
           )}

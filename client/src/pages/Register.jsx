@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, X } from 'lucide-react'
-import qrCode from '../assets/qr.webp'
 
 // Helper Component for Header
 const PageHeader = ({ eyebrow, title, description }) => (
@@ -346,12 +345,9 @@ export default function Register() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-purple-500/30 bg-purple-900/10 p-4 space-y-3">
-                <p className="text-xs font-bold uppercase tracking-widest text-purple-300">Payment QR</p>
-                <div className="mx-auto w-full max-w-[240px] overflow-hidden rounded-xl border border-white/15 bg-black/40 p-2">
-                  <img src={qrCode} alt="Registration payment QR code" className="w-full h-auto rounded-lg" />
-                </div>
-                <p className="text-center text-xs text-gray-300">Quick step: pay Rs 200 per team, then fill your squad details below.</p>
+              <div className="rounded-xl border border-purple-500/30 bg-purple-900/10 p-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-purple-300">Payment Information</p>
+                <p className="text-sm text-gray-300 mt-2">Please pay Rs 200 per team, then fill your squad details below.</p>
               </div>
 
               <Input name="teamName" label="Team Name" placeholder="Your team name" req onChange={handleChange} caps />

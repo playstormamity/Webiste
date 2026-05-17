@@ -69,13 +69,3 @@
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #A78BFA, #EC4899);
 }
-
-@media (hover: hover) and (pointer: fine) {
-  html, body {
-    cursor: url('./assets/cursor1.png'), auto !important;
-  }
-  
-  a, button, [role="button"], input, textarea, select, label {
-    cursor: url('./assets/pointer1.png'), pointer !important;
-  }
-}

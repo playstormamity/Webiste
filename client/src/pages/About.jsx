@@ -24,7 +24,7 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="About the club"
         title="Welcome to Playstorm ⚡🎯"
-        description="Playstorm is more than just a gaming community — it's a powerhouse of strategy, creativity, and collaboration. Powered by passion and run by students, Playstorm is where pixels meet purpose!"
+        description="Playstorm is more than just a gaming community it's a powerhouse of strategy, creativity, and collaboration. Powered by passion and run by students, Playstorm is where pixels meet purpose!"
       />
 
       <div className="grid gap-8 md:grid-cols-[3fr,2fr]">
@@ -33,30 +33,30 @@ export default function AboutPage() {
           <p>
             Whether you’re into esports, casual gaming, or game development, this is your ultimate hub to learn, play, compete, and grow.
           </p>
-          
+
           <h3 className="font-display text-lg text-white pt-2">Our Story</h3>
           <p>
-            Founded with the belief that <span className="text-purple-300">"college gaming deserves a stage,"</span> Playstorm began as a student-driven initiative to bring serious gaming into Amity’s cultural spotlight. With over 10+ successful gaming events hosted and a rapidly growing player base, Playstorm is now a staple for anyone who wants to game smart and dream big.
+            Founded with the belief that <span className="text-purple-300">"college gaming deserves a stage,"</span> Playstorm began as a student-driven initiative to bring serious gaming into Amity’s cultural spotlight. With over 14+ successful gaming events hosted and a rapidly growing player base, Playstorm is now a staple for anyone who wants to game smart and dream big.
           </p>
 
           <h3 className="font-display text-lg text-white pt-2">What We Do</h3>
           <ul className="space-y-3">
-             <li className="flex gap-3">
-               <Zap className="h-5 w-5 text-purple-400 flex-shrink-0" />
-               <span><strong>Esports & Competitive Events:</strong> From Valorant face-offs to FIFA leagues, compete with the best in organized tournaments and scrims.</span>
-             </li>
-             <li className="flex gap-3">
-               <Zap className="h-5 w-5 text-purple-400 flex-shrink-0" />
-               <span><strong>Community Gaming Nights:</strong> Chill out with fun multiplayer sessions, quirky theme nights, and party games.</span>
-             </li>
-             <li className="flex gap-3">
-               <Zap className="h-5 w-5 text-purple-400 flex-shrink-0" />
-               <span><strong>Game Dev Workshops:</strong> Learn the art of building games with Unity, Unreal Engine, and more.</span>
-             </li>
-             <li className="flex gap-3">
-               <Zap className="h-5 w-5 text-purple-400 flex-shrink-0" />
-               <span><strong>LAN Events & Fests:</strong> Represent Playstorm at Amity’s biggest fests and showcase your game IQ and team spirit.</span>
-             </li>
+            <li className="flex gap-3">
+              <Zap className="h-5 w-5 text-purple-400 flex-shrink-0" />
+              <span><strong>Esports & Competitive Events:</strong> From Valorant face-offs to FIFA leagues, compete with the best in organized tournaments and scrims.</span>
+            </li>
+            <li className="flex gap-3">
+              <Zap className="h-5 w-5 text-purple-400 flex-shrink-0" />
+              <span><strong>Community Gaming Nights:</strong> Chill out with fun multiplayer sessions, quirky theme nights, and party games.</span>
+            </li>
+            <li className="flex gap-3">
+              <Zap className="h-5 w-5 text-purple-400 flex-shrink-0" />
+              <span><strong>Game Dev Workshops:</strong> Learn the art of building games with Unity, Unreal Engine, and more.</span>
+            </li>
+            <li className="flex gap-3">
+              <Zap className="h-5 w-5 text-purple-400 flex-shrink-0" />
+              <span><strong>LAN Events & Fests:</strong> Represent Playstorm at Amity’s biggest fests and showcase your game IQ and team spirit.</span>
+            </li>
           </ul>
         </div>
 
@@ -81,37 +81,37 @@ export default function AboutPage() {
           </ul>
 
           <div className="mt-4 space-y-3 pt-4 border-t border-white/10">
-             <div className="font-display text-[10px] uppercase tracking-[0.24em] text-purple-200 mb-2">
-                Club Info
-             </div>
-             
-             <div className="flex items-center gap-2">
-               <Crown className="h-3.5 w-3.5 text-yellow-400" />
-               <span>President: Abhinav Sushil Varshney</span>
-             </div>
-             <div className="flex items-center gap-2">
-               <MapPin className="h-3.5 w-3.5 text-gray-400" />
-               <span>Amity University Noida</span>
-             </div>
-             <a href="mailto:playstorm.amity@gmail.com" className="flex items-center gap-2 hover:text-white transition">
-               <Mail className="h-3.5 w-3.5 text-purple-400" />
-               <span>playstorm.amity@gmail.com</span>
-             </a>
-             <a href="https://www.instagram.com/playstorm.amity/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition">
-               <Instagram className="h-3.5 w-3.5 text-pink-400" />
-               <span>@playstorm.amity</span>
-             </a>
-             <a href="https://discord.playstorm-amity.club" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition">
-               <Calendar className="h-3.5 w-3.5 text-indigo-400" />
-               <span>Events Calendar (Discord)</span>
-             </a>
+            <div className="font-display text-[10px] uppercase tracking-[0.24em] text-purple-200 mb-2">
+              Club Info
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Crown className="h-3.5 w-3.5 text-yellow-400" />
+              <span>President: Mudita Dani</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="h-3.5 w-3.5 text-gray-400" />
+              <span>Amity University Noida</span>
+            </div>
+            <a href="mailto:playstorm.amity@gmail.com" className="flex items-center gap-2 hover:text-white transition">
+              <Mail className="h-3.5 w-3.5 text-purple-400" />
+              <span>playstorm.amity@gmail.com</span>
+            </a>
+            <a href="https://www.instagram.com/playstorm.amity/" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition">
+              <Instagram className="h-3.5 w-3.5 text-pink-400" />
+              <span>@playstorm.amity</span>
+            </a>
+            <a href="https://discord.gg/eAqXkxgTF" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition">
+              <Calendar className="h-3.5 w-3.5 text-indigo-400" />
+              <span>Events Calendar (Discord)</span>
+            </a>
           </div>
-          
+
           <div className="pt-2 text-center flex flex-col items-center gap-2">
-             <span className="text-[10px] uppercase tracking-widest text-gray-500">#PlaystormOnTop</span>
-             <p className="border-t border-white/5 pt-3 mt-1 text-[11px] text-gray-400">
-               Made with 💜 by <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0&list=RDoHg5SJYRHA0&start_radio=1" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 transition-colors">Ashraful Zeya</a>
-             </p>
+            <span className="text-[10px] uppercase tracking-widest text-gray-500">#PlaystormOnTop</span>
+            <p className="border-t border-white/5 pt-3 mt-1 text-[11px] text-gray-400">
+              Made with 💜 for <span className="text-purple-400 font-medium">Playstorm Esports Club</span>
+            </p>
           </div>
         </div>
       </div>
