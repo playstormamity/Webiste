@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CalendarDays, MapPin, Trophy, ArrowRight, X, Info } from 'lucide-react'
+import { CalendarDays, MapPin, Trophy, ArrowRight, X, Info, Sparkles } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+import { createPortal } from 'react-dom'
+import { TiltCard, GlowCard, MagneticElement, playTactileClick, playDigitalHover, CursorPhysicsDistortion } from '../components/VisualEffects'
 
 // --- LOCAL ASSET IMPORTS (WEBP FORMAT) ---
 import season2Poster from '../assets/season2_poster.webp'
@@ -25,94 +27,112 @@ import arenaValorantPoster from '../assets/arena_valo1.webp'
 import arenaExperiencePoster from '../assets/arena_experience1.webp'
 import season3Poster from '../assets/season3_poster.png'
 
-// --- SHARED HEADER ---
-function PageHeader({ eyebrow, title, description }) {
-  return (
-    <div className="space-y-3 mb-10 border-b border-white/10 pb-8">
-      <p className="font-display text-[11px] uppercase tracking-[0.26em] text-purple-300">{eyebrow}</p>
-      <h2 className="font-display text-2xl text-white sm:text-3xl">{title}</h2>
-      <p className="max-w-2xl text-sm text-gray-300 sm:text-base">{description}</p>
-    </div>
-  )
-}
-
 // --- FEATURED EVENT CARD (Upcoming Season 3) ---
 function Season3EventSpotlight() {
   return (
-    <Link
-      to="/s3"
-      className="group relative block overflow-hidden rounded-2xl border border-purple-500/30 bg-black/50 p-6 md:p-10 shadow-2xl shadow-purple-900/20"
-    >
-      <div className="absolute -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-purple-600/20 blur-[120px]" />
-      <div className="absolute -left-40 -bottom-40 h-[360px] w-[360px] rounded-full bg-pink-600/20 blur-[120px]" />
-
-      <div className="relative z-10 grid gap-8 md:grid-cols-[1.4fr,1fr] items-center">
-        <div className="space-y-6">
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 px-3 py-1 text-[10px] font-bold uppercase tracking-widest">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-400"></span>
-              </span>
-              Upcoming
-            </div>
-            <span className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-yellow-300">Dates TBA</span>
-          </div>
-
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-gray-400">PlayStorm Esports Club</p>
-            <h3 className="font-display text-4xl md:text-5xl text-white mt-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-br from-purple-500 to-pink-500">Season 3</span>
-            </h3>
-            <p className="text-gray-300 text-sm md:text-base leading-relaxed mt-3">
-              The biggest inter-college online esports tournament by PlayStorm. 5 game titles — Valorant, BGMI, Clash Royale, Tekken 8 & EA FC 26. ₹1,10,000 total prize pool. Open to all college students across India.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-6 text-sm font-medium text-gray-300">
-            <div className="flex items-center gap-2">
-              <CalendarDays className="w-4 h-4 text-purple-400" />
-              <span>Dates TBA</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-purple-400" />
-              <span>Online (Discord)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Trophy className="w-4 h-4 text-purple-400" />
-              <span>₹1,10,000 Prize Pool</span>
-            </div>
-          </div>
-
-          <div className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-all">
-            View Details & Register <ArrowRight className="w-4 h-4" />
-          </div>
+    <TiltCard>
+      <Link
+        to="/s3"
+        onClick={playTactileClick}
+        onMouseEnter={playDigitalHover}
+        className="group relative block overflow-hidden rounded-2xl border border-purple-500/30 bg-black/50 p-6 md:p-10 shadow-2xl shadow-purple-900/20 transition-all duration-500 hover:shadow-[0_0_80px_rgba(168,85,247,0.3)] hover:border-purple-500/50"
+      >
+        {/* Background Poster */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <img
+            src={season3Poster}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-all duration-700 blur-[12px] scale-110 group-hover:scale-[1.15]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-purple-900/40 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-black/40" />
         </div>
 
-        <div className="hidden md:block border-l border-white/10 pl-8">
+        {/* Dynamic Backgrounds */}
+        <div className="absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-purple-600/30 to-pink-600/20 blur-[120px] group-hover:bg-purple-500/30 transition-colors duration-700 z-0" />
+        <div className="absolute -left-40 -bottom-40 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-blue-600/20 to-emerald-600/20 blur-[120px] group-hover:bg-blue-500/30 transition-colors duration-700 z-0" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay z-0" />
+
+        {/* Animated Border/Shimmer */}
+        <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:animate-shimmer pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        <div className="relative z-10 grid gap-8 md:grid-cols-[1.4fr,1fr] items-center">
           <div className="space-y-6">
-            <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Organizers</p>
-              <p className="text-white">PlayStorm Esports Club</p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-[10px] font-bold uppercase tracking-widest relative">
+                <span className="absolute -inset-1 bg-emerald-500/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500"></span>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="relative text-emerald-400">REGISTRATION OPEN</span>
+              </div>
+              <span className="rounded-full border border-purple-500/30 bg-black/40 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-sm relative">
+                <span className="absolute -inset-1 bg-purple-500/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500"></span>
+                <span className="relative">May 30 - Jun 28</span>
+              </span>
             </div>
-            <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Venue</p>
-              <p className="text-white">Online (Discord)</p>
+
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-gray-400">PlayStorm Esports Club</p>
+              <h3 className="font-display text-4xl md:text-5xl text-white mt-2">
+                <span className="text-transparent bg-clip-text bg-gradient-to-br from-purple-500 to-pink-500 drop-shadow-[0_0_15px_rgba(236,72,153,0.3)]">Season 3</span>
+              </h3>
+              <p className="text-gray-300 text-sm md:text-base leading-relaxed mt-3">
+                The biggest inter-college online esports tournament by PlayStorm. 5 game titles — Valorant, BGMI, Clash Royale, Tekken 8 & EA FC 26. ₹1L+ total prize pool. Open to all college students across India.
+              </p>
             </div>
-            <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Game Titles</p>
-              <div className="flex flex-wrap gap-2 pt-1">
-                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">Valorant</span>
-                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">BGMI</span>
-                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">Clash Royale</span>
-                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">Tekken 8</span>
-                <span className="px-2 py-1 rounded bg-white/10 text-[10px] uppercase font-bold text-gray-300">EA FC 26</span>
+
+            <div className="flex flex-wrap gap-6 text-sm font-medium text-gray-300">
+              <div className="flex items-center gap-2">
+                <CalendarDays className="w-4 h-4 text-purple-400" />
+                <span>May 30 - Jun 28</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-purple-400" />
+                <span>Online (Discord)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Trophy className="w-4 h-4 text-yellow-400" />
+                <span className="text-yellow-400">₹1L+ Prize Pool</span>
+              </div>
+            </div>
+
+            <div className="relative inline-flex group/btn">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-30 group-hover/btn:opacity-60 transition duration-300"></div>
+              <div className="relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-lg transition-all group-hover/btn:shadow-purple-500/40">
+                View Details & Register <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden md:block border-l border-white/10 pl-8 relative">
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[1px] h-3/4 bg-gradient-to-b from-transparent via-purple-500 to-transparent opacity-50" />
+
+            <div className="space-y-6">
+              <div className="space-y-1">
+                <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Organizers</p>
+                <p className="text-white">PlayStorm Esports Club</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Venue</p>
+                <p className="text-white">Online (Discord)</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Game Titles</p>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {['Valorant', 'BGMI', 'Clash Royale', 'Tekken 8', 'EA FC 26'].map((game) => (
+                    <span key={game} className="px-2 py-1 rounded bg-black/60 border border-white/10 text-[10px] uppercase font-bold text-gray-300 hover:border-purple-500/50 hover:text-white hover:shadow-[0_0_10px_rgba(168,85,247,0.3)] transition-all cursor-default">
+                      {game}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </TiltCard>
   )
 }
 
@@ -120,14 +140,14 @@ function Season3EventSpotlight() {
 function EventModal({ event, onClose }) {
   if (!event) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-2xl bg-[#0a0a0a] border border-purple-500/30 rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-2xl bg-[#0a0a0a] border border-purple-500/30 rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto text-white"
       >
         <button
           onClick={onClose}
@@ -149,7 +169,7 @@ function EventModal({ event, onClose }) {
 
           <div className="space-y-4 text-sm text-gray-300 leading-relaxed border-t border-white/10 pt-4">
             {event.description ? (
-              <div className="whitespace-pre-line">{event.description}</div>
+              <div className="whitespace-pre-line text-gray-300">{event.description}</div>
             ) : (
               <p className="italic text-gray-500">No additional details available for this event.</p>
             )}
@@ -159,7 +179,7 @@ function EventModal({ event, onClose }) {
                 <p className="text-xs font-bold uppercase tracking-widest text-purple-300">Series Timeline</p>
                 <div className="space-y-3">
                   {event.subEvents.map((item, index) => (
-                    <div key={`${item.title}-${index}`} className="rounded-xl border border-white/10 bg-black/40 p-3">
+                    <div key={`${item.title}-${index}`} className="rounded-xl border border-white/10 bg-black/60 p-3">
                       <div className="flex flex-wrap items-center gap-2 text-xs text-gray-400">
                         <span className="font-semibold uppercase tracking-widest text-gray-300">{item.date}</span>
                         {item.venue && <span className="text-gray-500">• {item.venue}</span>}
@@ -186,7 +206,8 @@ function EventModal({ event, onClose }) {
           )}
         </div>
       </motion.div>
-    </div>
+    </div>,
+    document.body
   )
 }
 
@@ -196,33 +217,37 @@ function EventRow({ event, onClick, clickable = true }) {
   const isClickable = clickable && typeof onClick === 'function';
 
   return (
-    <div
-      onClick={isClickable ? () => onClick(event) : undefined}
-      className={`group flex items-center justify-between p-4 rounded-xl border ${isClickable ? 'cursor-pointer' : 'cursor-default'} ${isPast ? 'border-white/5 bg-white/5 opacity-80 hover:opacity-100' : 'border-purple-500/20 bg-purple-500/5 hover:border-purple-500/40'} transition`}
-    >
-      <div>
-        <h4 className={`font-bold text-sm md:text-base transition ${isPast ? 'text-gray-300 group-hover:text-white' : 'text-white group-hover:text-purple-300'}`}>
-          {event.title}
-        </h4>
-        <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-          <CalendarDays className="w-3 h-3" />
-          <span>{event.date}</span>
+    <MagneticElement>
+      <div
+        onClick={isClickable ? () => { playTactileClick(); onClick(event); } : undefined}
+        onMouseEnter={playDigitalHover}
+        className={`group flex items-center justify-between p-4 rounded-xl border w-full ${isClickable ? 'cursor-pointer' : 'cursor-default'} ${isPast ? 'border-white/5 bg-white/5 opacity-80 hover:opacity-100' : 'border-purple-500/20 bg-purple-500/5 hover:border-purple-500/40'} transition duration-300`}
+      >
+        <div>
+          <h4 className={`font-bold text-sm md:text-base transition ${isPast ? 'text-gray-300 group-hover:text-white' : 'text-white group-hover:text-purple-300'}`}>
+            {event.title}
+          </h4>
+          <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+            <CalendarDays className="w-3 h-3" />
+            <span>{event.date}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${isPast ? 'bg-black/20 border-white/5 text-gray-500' : 'bg-purple-500/10 border-purple-500/20 text-purple-300'}`}>
+            {event.tag}
+          </span>
+          <Info className="w-4 h-4 text-gray-600 group-hover:text-purple-400 transition" />
         </div>
       </div>
-      <div className="flex items-center gap-3">
-        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${isPast ? 'bg-black/20 border-white/5 text-gray-500' : 'bg-purple-500/10 border-purple-500/20 text-purple-300'}`}>
-          {event.tag}
-        </span>
-        <Info className="w-4 h-4 text-gray-600 group-hover:text-purple-400 transition" />
-      </div>
-    </div>
+    </MagneticElement>
   )
 }
 
 function MajorEventCard({ event, onClick }) {
   const navigate = useNavigate()
-  
+
   const handleClick = () => {
+    playTactileClick()
     if (event.linkTo) {
       navigate(event.linkTo)
     } else {
@@ -231,49 +256,52 @@ function MajorEventCard({ event, onClick }) {
   }
 
   return (
-    <div
-      onClick={handleClick}
-      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-6 md:p-8 shadow-2xl shadow-black/30 cursor-pointer"
-    >
-      {event.cover && (
-        <div className="absolute inset-0">
-          <img
-            src={event.cover}
-            alt={event.title}
-            className="h-full w-full object-cover opacity-25 group-hover:opacity-35 transition duration-700"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/30" />
-        </div>
-      )}
+    <TiltCard>
+      <GlowCard
+        onClick={handleClick}
+        onMouseEnter={playDigitalHover}
+        className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/60 p-6 md:p-8 shadow-2xl shadow-black/30 cursor-pointer"
+      >
+        {event.cover && (
+          <div className="absolute inset-0">
+            <img
+              src={event.cover}
+              alt={event.title}
+              className="h-full w-full object-cover opacity-25 group-hover:opacity-35 transition duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/30" />
+          </div>
+        )}
 
-      <div className="relative z-10 space-y-5">
-        <div className="flex items-center gap-3">
-          <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-[10px] font-bold uppercase tracking-widest border border-purple-500/30">
-            {event.tag}
-          </span>
-          <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">{event.date}</span>
+        <div className="relative z-10 space-y-5">
+          <div className="flex items-center gap-3">
+            <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-[10px] font-bold uppercase tracking-widest border border-purple-500/30">
+              {event.tag}
+            </span>
+            <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">{event.date}</span>
+          </div>
+          <div>
+            <h4 className="font-display text-2xl text-white">{event.title}</h4>
+            <p className="text-sm text-gray-300 mt-2">{event.summary}</p>
+            {event.subEvents && event.subEvents.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {event.subEvents.map((subEvent, index) => (
+                  <span
+                    key={`${event.title}-sub-${index}`}
+                    className="rounded-full border border-purple-400/30 bg-purple-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-purple-200"
+                  >
+                    {subEvent.title}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-200">
+            View details <ArrowRight className="w-3 h-3" />
+          </div>
         </div>
-        <div>
-          <h4 className="font-display text-2xl text-white">{event.title}</h4>
-          <p className="text-sm text-gray-300 mt-2">{event.summary}</p>
-          {event.subEvents && event.subEvents.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {event.subEvents.map((subEvent, index) => (
-                <span
-                  key={`${event.title}-sub-${index}`}
-                  className="rounded-full border border-purple-400/30 bg-purple-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-purple-200"
-                >
-                  {subEvent.title}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-200">
-          View details <ArrowRight className="w-3 h-3" />
-        </div>
-      </div>
-    </div>
+      </GlowCard>
+    </TiltCard>
   )
 }
 
@@ -836,24 +864,39 @@ Highlights:
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
-      transition={{ duration: 0.45 }}
-      className="max-w-5xl mx-auto space-y-12 pb-12"
+      transition={{ duration: 0.45, ease: 'easeOut' }}
+      className="space-y-12 pb-12"
     >
-      <PageHeader
-        eyebrow="Calendar"
-        title="Tournaments & Events"
-        description="Join the action. From serious competitive brackets to chill community nights."
-      />
+      {/* 1. LOOKSMAXED HEADER */}
+      <div className="space-y-4 relative lg:max-w-full">
+        <div className="absolute -top-12 -left-10 w-44 h-44 bg-purple-500/10 rounded-full blur-[60px] pointer-events-none" />
+        <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-1.5 backdrop-blur-md text-[10px] font-mono font-black uppercase tracking-[0.25em] text-purple-300">
+          <Sparkles className="w-3.5 h-3.5 text-pink-400 animate-pulse" />
+          <span>Esports Timeline</span>
+        </div>
 
-      {/* 1. SPOTLIGHT EVENT */}
+        <div>
+          <CursorPhysicsDistortion>
+            <h1 className="font-display text-3xl font-black tracking-tighter text-white sm:text-5xl uppercase">
+              Tournaments & <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]">Events</span>
+            </h1>
+          </CursorPhysicsDistortion>
+        </div>
+
+        <p className="max-w-full text-sm leading-relaxed text-gray-300 sm:text-base border-l-2 border-purple-500/50 pl-4 py-1">
+          Join the operational theater. From high-stakes national inter-college brackets to immersive intra-university LANs and gaming nights.
+        </p>
+      </div>
+
+      {/* 2. SPOTLIGHT EVENT */}
       <section>
         <Season3EventSpotlight />
       </section>
 
-      {/* 2. PAST EVENTS LIST */}
+      {/* 3. PAST EVENTS LIST */}
       <section className="space-y-6">
-        <h3 className="text-lg font-bold text-gray-400 uppercase tracking-wide border-l-4 border-gray-600 pl-4">
-          Past Events
+        <h3 className="text-sm font-bold text-purple-300 uppercase tracking-[0.22em] border-l-2 border-purple-500/50 pl-4 py-0.5">
+          Past Operations Archive
         </h3>
         <div className="space-y-5">
           {(() => {

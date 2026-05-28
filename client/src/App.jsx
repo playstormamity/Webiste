@@ -8,9 +8,9 @@ import Layout from './components/Layout'
 import LoadingScreen from './components/LoadingScreen'
 import ScrollToTop from './components/ScrollToTop'
 
-
 // --- NEW VISUAL EFFECTS ---
-import { CursorTrackerBackground, ParticleBackground } from './components/VisualEffects'
+import { CursorTrackerBackground, CinematicGrain, ScrollProgressBar, BackToTop } from './components/VisualEffects'
+import { CosmicMeshNebulaBackground } from './components/BackgroundOptions'
 
 // Pages
 import HomePage from './pages/Home'
@@ -21,10 +21,10 @@ import LeaderboardPage from './pages/Leaderboard'
 import ContactPage from './pages/Contact'
 import RegisterPage from './pages/Register'
 import LineupsPage from './pages/Lineups'
-import NotFound from './pages/NotFound'
 import ProArenaPage from './pages/ProArena'
 import Season3Page from './pages/Season3'
 import AdminAuthPage from './pages/AdminAuth'
+import NotFound from './pages/NotFound'
 
 // --- ADMIN PROTECTED ROUTE WRAPPER ---
 import { Navigate } from 'react-router-dom'
@@ -38,7 +38,6 @@ const AdminRoute = ({ children }) => {
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
-
   useEffect(() => {
     // Show loading screen for 2.5 seconds
     const timer = setTimeout(() => {
@@ -54,10 +53,15 @@ function App() {
       <ScrollToTop /> {/* Forces page to top on route change */}
       
       {/* 2. GLOBAL VISUAL EFFECTS */}
+      <ScrollProgressBar />
+      <BackToTop />
+      <CinematicGrain />
       <CursorTrackerBackground />
-      <ParticleBackground />
+      
+      {/* 3. DYNAMIC BACKGROUND LAYER */}
+      <CosmicMeshNebulaBackground />
 
-      {/* 3. GLOBAL AUDIO */}
+      {/* 4. GLOBAL AUDIO */}
 
       
       {/* 4. LOADING SCREEN ANIMATION */}

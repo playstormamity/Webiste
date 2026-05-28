@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { NavLink, Link } from 'react-router-dom'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, animate, useInView } from 'framer-motion'
 import { ArrowRight, Gamepad2, Users, Trophy, Instagram, Linkedin, Server, Copy, Check, Activity, Zap, MapPin, Calendar, Youtube, FileText, Lock, Sparkles, Pin, Heart, MessageCircle, Play, ExternalLink, Grid } from 'lucide-react'
 import ConfettiButton from '../components/ConfettiButton'
 import FloatingParticles from '../components/FloatingParticles'
+import { TiltCard, TypedText, StaggerReveal, StaggerItem, MagneticElement, GlowCard, CursorPhysicsDistortion, playTactileClick, playDigitalHover } from '../components/VisualEffects'
 import playstormLogo from '../assets/logo.png'
 import lineupsPoster from '../assets/lineups_poster.webp'
 import arenaBgmi from '../assets/arena_bgmi1.webp'
@@ -17,31 +18,28 @@ import season3Poster from '../assets/season3_poster.png'
 // --- ANIMATED COMPONENTS ---
 
 function CountUpStat({ label, value, prefix = "", suffix = "+" }) {
-  const [count, setCount] = useState(0)
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-50px" })
+  const [displayValue, setDisplayValue] = useState(0)
   const numericValue = parseInt(value.replace(/\D/g, ''))
 
   useEffect(() => {
-    if (isNaN(numericValue)) return
-    let current = 0
-    const increment = Math.ceil(numericValue / 50)
-    const timer = setInterval(() => {
-      current += increment
-      if (current >= numericValue) {
-        setCount(numericValue)
-        clearInterval(timer)
-      } else {
-        setCount(current)
-      }
-    }, 30)
-    return () => clearInterval(timer)
-  }, [numericValue])
+    if (isInView && !isNaN(numericValue)) {
+      const controls = animate(0, numericValue, {
+        duration: 2.5,
+        ease: "easeOut",
+        onUpdate: (val) => setDisplayValue(Math.floor(val))
+      })
+      return controls.stop
+    }
+  }, [isInView, numericValue])
 
-  const formatted = count >= 1000 ? `${Math.floor(count / 1000)}K` : count
+  const formatted = displayValue >= 1000 ? `${Math.floor(displayValue / 1000)}K` : displayValue
 
   return (
-    <div>
-      <div className="font-display text-2xl font-bold text-white">{prefix}{formatted}{suffix}</div>
-      <div className="text-[10px] uppercase tracking-wider text-gray-500">{label}</div>
+    <div ref={ref}>
+      <div className="font-display text-2xl font-bold text-white drop-shadow-md">{prefix}{formatted}{suffix}</div>
+      <div className="text-[10px] uppercase tracking-wider text-purple-400/80 mt-1">{label}</div>
     </div>
   )
 }
@@ -108,10 +106,11 @@ function InstaReelCard({ title, tag, isPinned, views, likes, comments, bgImage, 
   }, [])
 
   return (
-    <div
-      ref={cardRef}
-      className="group relative block h-[500px] w-full overflow-hidden rounded-2xl border border-white/10 bg-black transition-all duration-500 hover:border-pink-500/50 shadow-xl"
-    >
+    <TiltCard>
+      <div
+        ref={cardRef}
+        className="group relative block h-[500px] w-full overflow-hidden rounded-2xl border border-white/10 bg-black transition-all duration-500 hover:border-pink-500/50 shadow-xl"
+      >
       {/* Instagram Embed iframe (loads when in view) — INTERACTIVE */}
       {instaShortcode && isInView ? (
         <div className="absolute inset-0 w-full h-full">
@@ -165,7 +164,7 @@ function InstaReelCard({ title, tag, isPinned, views, likes, comments, bgImage, 
       <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="absolute bottom-4 left-4 right-4 z-20 space-y-3 transform transition-transform duration-300 group-hover:translate-y-[-4px]">
         <h3 className="font-display text-lg font-bold text-white leading-snug tracking-wide line-clamp-2 drop-shadow-md">{title}</h3>
         
-        <div className="flex items-center justify-between pt-3 border-t border-white/15 text-xs text-gray-300 backdrop-blur-sm rounded-xl bg-black/30 p-2.5 border border-white/5">
+        <div className="flex items-center justify-between pt-3 border-t border-white/15 text-xs text-gray-300 backdrop-blur-md rounded-xl bg-black/60 p-2.5 border border-white/10">
           <div className="flex items-center gap-3 font-medium">
             <span className="flex items-center gap-1 text-pink-400"><Heart className="w-3.5 h-3.5 fill-current" /> {likes}</span>
             <span className="flex items-center gap-1 text-purple-300"><MessageCircle className="w-3.5 h-3.5 fill-current" /> {comments}</span>
@@ -176,6 +175,7 @@ function InstaReelCard({ title, tag, isPinned, views, likes, comments, bgImage, 
         </div>
       </a>
     </div>
+    </TiltCard>
   )
 }
 
@@ -200,11 +200,13 @@ function GameCard({ title, type, youtubeId, bgImage }) {
   } : {}
 
   return (
-    <Wrapper
-      ref={cardRef}
-      {...wrapperProps}
-      className="group relative block h-[400px] w-full overflow-hidden rounded-2xl border border-white/10 bg-black hover:scale-105 transition-transform duration-300"
-    >
+    <TiltCard>
+      <GlowCard className="h-full">
+        <Wrapper
+          ref={cardRef}
+          {...wrapperProps}
+          className="group relative block h-[400px] w-full overflow-hidden rounded-2xl border border-white/10 bg-black/80 transition-all duration-300"
+        >
       {youtubeId && isInView ? (
         <div className="absolute inset-0 w-full h-full pointer-events-none">
           <iframe
@@ -236,13 +238,17 @@ function GameCard({ title, type, youtubeId, bgImage }) {
         <div className="text-[10px] font-bold uppercase tracking-widest text-yellow-400">{type}</div>
         <h3 className="font-display text-2xl font-bold uppercase text-white truncate">{title}</h3>
       </div>
-    </Wrapper>
+        </Wrapper>
+      </GlowCard>
+    </TiltCard>
   )
 }
 
 function EventPreviewCard({ title, date, tag, description, linkTo, isClosed = false }) {
   return (
-    <Link to={linkTo} className={`group flex flex-col justify-between rounded-2xl border ${isClosed ? 'border-red-500/30' : 'border-purple-500/40'} bg-black/40 p-4 shadow-lg hover:scale-[1.02] transition-all block`}>
+    <TiltCard>
+      <GlowCard className="h-full">
+        <Link to={linkTo} className={`group flex h-full flex-col justify-between rounded-2xl border ${isClosed ? 'border-red-500/30' : 'border-purple-500/40'} bg-black/60 p-4 shadow-lg block`}>
       <div>
         <div className="flex items-center justify-between gap-3 text-[11px] text-gray-300">
           <span>{date}</span>
@@ -253,7 +259,9 @@ function EventPreviewCard({ title, date, tag, description, linkTo, isClosed = fa
         <h3 className="mt-3 text-base font-semibold text-white">{title}</h3>
         <p className="mt-2 text-xs text-gray-400">{description}</p>
       </div>
-    </Link>
+        </Link>
+      </GlowCard>
+    </TiltCard>
   )
 }
 
@@ -285,13 +293,18 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="space-y-24 pb-12 overflow-x-hidden">
+    <motion.div 
+      initial={{ opacity: 0, y: 16 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ duration: 0.45, ease: 'easeOut' }} 
+      className="space-y-24 pb-12 overflow-x-hidden"
+    >
 
       {/* 1. HERO SECTION */}
       <section className="relative min-h-[80vh] flex flex-col justify-center px-4">
         <FloatingParticles />
-        <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] bg-purple-600/20 blur-[120px] rounded-full opacity-50" />
-        <div className="absolute bottom-0 left-0 -z-10 h-[400px] w-[400px] bg-pink-600/10 blur-[100px] rounded-full opacity-40" />
+        <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] bg-indigo-950/20 blur-[120px] rounded-full opacity-50" />
+        <div className="absolute bottom-0 left-0 -z-10 h-[400px] w-[400px] bg-slate-900/10 blur-[100px] rounded-full opacity-40" />
 
         <div className="grid gap-12 lg:grid-cols-[1.2fr,0.8fr] lg:items-center">
           <motion.div
@@ -300,37 +313,61 @@ export default function HomePage() {
             transition={{ duration: 0.8 }}
             className="space-y-8"
           >
-            <h1 className="font-display text-5xl font-bold uppercase leading-[0.9] text-white sm:text-7xl lg:text-8xl tracking-tight">
-              Amity's Premier <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400">Esports Community</span>
-            </h1>
+            <CursorPhysicsDistortion>
+              <h1 
+                onMouseEnter={playDigitalHover}
+                className="font-display text-5xl font-black uppercase leading-[0.85] text-white sm:text-7xl lg:text-8xl tracking-tighter select-none cursor-default"
+              >
+                Amity's Premier <br />
+                <motion.span 
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-fuchsia-500 to-pink-500"
+                  style={{ backgroundSize: '200% auto' }}
+                  animate={{ backgroundPosition: ['0% center', '200% center'] }}
+                  transition={{ duration: 4, ease: "linear", repeat: Infinity }}
+                >
+                  Esports Community
+                </motion.span>
+              </h1>
+            </CursorPhysicsDistortion>
 
             <p className="max-w-xl text-lg text-gray-300 leading-relaxed">
-              Amity's most elite esports community. We host tournaments, LANs, and events that hit different. No cap. 🔥
+              <TypedText text="Amity's most elite esports community. We host tournaments, LANs, and events that hit different. No cap. 🔥" speed={30} delay={800} />
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
-              <ConfettiButton
-                onClick={() => { }}
-                className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-4 text-sm font-bold uppercase tracking-widest text-white transition-all hover:scale-105 shadow-lg shadow-purple-500/25"
-              >
-                <Link to="/events" className="flex items-center gap-3">
-                  <Trophy className="w-4 h-4" />
-                  <span className="relative z-10">View Events</span>
-                </Link>
-              </ConfettiButton>
+              <MagneticElement range={50}>
+                <div onMouseEnter={playDigitalHover} onClick={playTactileClick}>
+                  <ConfettiButton
+                    onClick={() => { }}
+                    className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 px-8 py-4 text-sm font-bold uppercase tracking-widest text-white transition-all hover:scale-105 shadow-lg shadow-indigo-500/25 cursor-pointer"
+                  >
+                    <Link to="/events" className="flex items-center gap-3">
+                      <Trophy className="w-4 h-4" />
+                      <span className="relative z-10">View Events</span>
+                    </Link>
+                  </ConfettiButton>
+                </div>
+              </MagneticElement>
 
-              <Link to="/roster" className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-4 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-white/10">
-                Meet The Squad
-              </Link>
+              <MagneticElement range={50}>
+                <Link 
+                  to="/roster" 
+                  onMouseEnter={playDigitalHover}
+                  onClick={playTactileClick}
+                  className="group relative inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-4 text-sm font-bold uppercase tracking-widest text-white transition-all hover:bg-white/10 hover:border-slate-500/50 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] overflow-hidden cursor-pointer"
+                >
+                  <span className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-slate-500 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                  Meet The Squad <Users className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                </Link>
+              </MagneticElement>
             </div>
 
             <div className="flex items-center gap-8 pt-4">
-              <CountUpStat label="Prize Pool" value="95000" prefix="₹" suffix="+" />
+              <CountUpStat label="Prize Pool" value="100000" prefix="₹" suffix="+" />
               <div className="h-8 w-px bg-white/10" />
-              <CountUpStat label="Footfall" value="40000" suffix="+" />
+              <CountUpStat label="Game Titles" value="5" suffix="" />
               <div className="h-8 w-px bg-white/10" />
-              <CountUpStat label="Colleges" value="50" suffix="+" />
+              <CountUpStat label="Entry Fee" value="100" prefix="₹" suffix="" />
             </div>
           </motion.div>
 
@@ -341,36 +378,68 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative hidden lg:block"
           >
-            <Link to="/s3" className="group relative block overflow-hidden rounded-3xl border border-purple-500/40 bg-black/40 shadow-2xl backdrop-blur-sm transition-all hover:scale-[1.02] hover:border-purple-400/60">
-              <div className="flex flex-col">
-                <div className="w-full overflow-hidden">
-                  <img src={season3Poster} alt="PlayStorm Season 3" className="w-full h-[260px] object-cover object-top transition-transform duration-500 group-hover:scale-105" />
-                </div>
-                <div className="p-8 space-y-4">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white animate-pulse">🔥 Upcoming</span>
-                    <span className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-yellow-300">Dates TBA</span>
-                  </div>
-                  <h3 className="font-display text-3xl font-bold text-white">PlayStorm Season 3</h3>
-                  <p className="text-sm text-gray-400 leading-relaxed">Multi-title online esports showdown — Valorant, BGMI, Clash Royale, Tekken 8 & FC 26. ₹1,10,000 prize pool.</p>
+            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 via-blue-600 to-slate-700 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-1000 animate-pulse"></div>
+            
+            <TiltCard>
+              <Link to="/s3" className="group relative block rounded-3xl bg-black/80 shadow-[0_0_50px_rgba(255,255,255,0.03)] backdrop-blur-xl transition-all duration-500 hover:shadow-[0_0_80px_rgba(99,102,241,0.15)] hover:-translate-y-2 p-[2px] overflow-hidden">
+                
+                {/* Rotating Border Layer */}
+                <div className="absolute inset-[-100%] z-0 animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#00000000_50%,#818cf8_100%)] opacity-70 group-hover:opacity-100 transition-opacity" />
+                
+                {/* Inner container to hold background and content */}
+                <div className="relative z-10 h-full w-full rounded-[22px] bg-[#0c0c0e] overflow-hidden">
                   
-                  <div className="flex flex-wrap gap-4 pt-2 border-t border-white/10 mt-4">
-                    <div className="flex flex-col">
-                      <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Prize Pool</span>
-                      <span className="text-sm font-semibold text-purple-300">₹1.1L</span>
-                    </div>
-                    <div className="flex flex-col border-l border-white/10 pl-4">
-                      <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Games</span>
-                      <span className="text-sm font-semibold text-gray-300">5 Titles</span>
-                    </div>
-                  </div>
+                  {/* Inner Shimmer */}
+                  <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/5 to-transparent group-hover:animate-shimmer pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20" />
 
-                  <div className="inline-flex items-center justify-center gap-2 w-full mt-4 rounded-xl bg-purple-500/10 border border-purple-500/30 px-4 py-3 text-xs font-bold uppercase tracking-widest text-purple-300 group-hover:bg-purple-500/20 transition">
-                    View Details & Register <ArrowRight className="w-4 h-4" />
+                  <div className="flex flex-col relative z-10">
+                    <div className="w-full h-[240px] overflow-hidden relative">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
+                      <img src={season3Poster} alt="PlayStorm Season 3" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" />
+                      
+                      {/* Floating Badge Over Image */}
+                      <div className="absolute top-4 right-4 z-20 inline-flex items-center gap-2 rounded-full border border-emerald-500/50 bg-black/60 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-emerald-400 backdrop-blur-md shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        Registration Open
+                      </div>
+                    </div>
+
+                    <div className="p-8 pt-6 space-y-5">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-sm relative overflow-hidden">
+                          <span className="absolute inset-0 bg-indigo-500/15 blur opacity-0 group-hover:opacity-100 transition duration-500"></span>
+                          May 30 - Jun 28
+                        </span>
+                      </div>
+                      
+                      <div>
+                        <h3 className="font-display text-4xl font-bold tracking-tight text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-indigo-300 transition-colors">PlayStorm Season 3</h3>
+                        <p className="text-sm text-gray-400 leading-relaxed mt-2">Multi-title online esports showdown. 5 major game titles. ₹1L+ prize pool.</p>
+                      </div>
+                      
+                      <div className="flex items-center justify-between pt-2 border-t border-white/10 mt-4 relative">
+                        <div className="absolute inset-x-0 -top-[1px] h-[1px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent"></div>
+                        <div className="flex flex-col">
+                          <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Prize Pool</span>
+                          <span className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">₹1L+</span>
+                        </div>
+                        <div className="flex flex-col text-right">
+                          <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Games</span>
+                          <span className="text-lg font-black text-white">5 Titles</span>
+                        </div>
+                      </div>
+
+                      <div className="relative inline-flex items-center justify-center gap-2 w-full mt-4 rounded-xl bg-white px-4 py-3.5 text-xs font-black uppercase tracking-widest text-black shadow-lg transition-all group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-blue-600 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] border border-transparent group-hover:border-white/20">
+                        Enter The Arena <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </TiltCard>
           </motion.div>
         </div>
       </section>
@@ -380,10 +449,10 @@ export default function HomePage() {
 
       {/* 3. INSTAGRAM CREATIVE SHOWCASE */}
       <Section id="instagram" className="px-4 max-w-7xl mx-auto w-full">
-        <div className="relative overflow-hidden rounded-3xl border border-pink-500/20 bg-gradient-to-b from-purple-950/20 via-black/60 to-black p-6 sm:p-10 backdrop-blur-xl shadow-[0_0_50px_rgba(236,72,153,0.1)] space-y-8">
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-slate-950/20 via-black/60 to-black p-6 sm:p-10 backdrop-blur-xl shadow-[0_0_50px_rgba(255,255,255,0.02)] space-y-8">
           {/* Subtle background glow */}
-          <div className="absolute top-0 right-1/4 -z-10 h-96 w-96 bg-pink-600/10 blur-[120px] rounded-full pointer-events-none" />
-          <div className="absolute bottom-0 left-1/4 -z-10 h-96 w-96 bg-purple-600/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute top-0 right-1/4 -z-10 h-96 w-96 bg-slate-900/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 -z-10 h-96 w-96 bg-indigo-950/10 blur-[120px] rounded-full pointer-events-none" />
 
           {/* Instagram Profile Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-8 border-b border-white/10">
@@ -479,11 +548,17 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <GameCard title="♡" type="365 Days of PlayStorm" youtubeId="iKLKOCxpLlk" bgImage={arenaBgmi} />
-          <GameCard title="In Campus" type="Hide & Seek" youtubeId="noB4mll_5-o" bgImage={arenaValo} />
-          <GameCard title="Trailer" type="The Pro Arena" youtubeId="nkIqYqU_I-Y" bgImage={arenaExperience} />
-        </div>
+        <StaggerReveal className="grid gap-4 md:grid-cols-3">
+          <StaggerItem>
+            <GameCard title="♡" type="365 Days of PlayStorm" youtubeId="iKLKOCxpLlk" bgImage={arenaBgmi} />
+          </StaggerItem>
+          <StaggerItem>
+            <GameCard title="In Campus" type="Hide & Seek" youtubeId="noB4mll_5-o" bgImage={arenaValo} />
+          </StaggerItem>
+          <StaggerItem>
+            <GameCard title="Trailer" type="The Pro Arena" youtubeId="nkIqYqU_I-Y" bgImage={arenaExperience} />
+          </StaggerItem>
+        </StaggerReveal>
       </Section>
 
       {/* 5. EVENTS */}
@@ -492,14 +567,20 @@ export default function HomePage() {
           <p className="font-display text-[11px] uppercase tracking-[0.26em] text-purple-300">What's Poppin</p>
           <h2 className="font-display text-xl text-white sm:text-2xl">Recent Events ✨</h2>
         </div>
-        <div className="grid gap-5 md:grid-cols-3">
-          <EventPreviewCard title="#Respawn" date="Mar 12" tag="LAN" description="PlayStorm × Happiness Club collab. 300+ footfall. BGMI, FC25 & Tekken 8 tournaments." linkTo="/events" />
-          <EventPreviewCard title="The Pro Arena" date="Feb 27-28" tag="Major" description="281 players, 65 teams, 1,500+ footfall. BGMI & Valorant LAN championship at E2 Auditorium." linkTo="/pro-arena" />
-          <EventPreviewCard title="Season 2 Finals" date="Feb 5" tag="LAN" description="Multi-title tournament: Valorant, BGMI, Clash Royale, CODM & Tekken on finale day." linkTo="/events" />
-        </div>
+        <StaggerReveal className="grid gap-5 md:grid-cols-3">
+          <StaggerItem>
+            <EventPreviewCard title="#Respawn" date="Mar 12" tag="LAN" description="PlayStorm × Happiness Club collab. 300+ footfall. BGMI, FC25 & Tekken 8 tournaments." linkTo="/events" />
+          </StaggerItem>
+          <StaggerItem>
+            <EventPreviewCard title="The Pro Arena" date="Feb 27-28" tag="Major" description="281 players, 65 teams, 1,500+ footfall. BGMI & Valorant LAN championship at E2 Auditorium." linkTo="/pro-arena" />
+          </StaggerItem>
+          <StaggerItem>
+            <EventPreviewCard title="Season 2 Finals" date="Feb 5" tag="LAN" description="Multi-title tournament: Valorant, BGMI, Clash Royale, CODM & Tekken on finale day." linkTo="/events" />
+          </StaggerItem>
+        </StaggerReveal>
 
         {/* SOCIAL LINKS ROW */}
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/40 px-5 py-4 text-xs text-gray-200">
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/60 px-5 py-4 text-xs text-gray-200">
           <div><p className="font-display text-[11px] uppercase tracking-[0.22em] text-purple-200">Connect</p></div>
           <div className="flex flex-wrap items-center gap-3">
             <a href="https://discord.gg/eAqXkxgTF" target="_blank" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-3 py-1.5 text-[11px] uppercase tracking-[0.2em] text-white">
@@ -512,6 +593,6 @@ export default function HomePage() {
         </div>
       </Section>
 
-    </div>
+    </motion.div>
   )
 }

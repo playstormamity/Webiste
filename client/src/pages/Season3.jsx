@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, X, Trophy, Swords, Target, Gamepad2, Crown, Zap, Clock } from 'lucide-react'
+import { CheckCircle, X, Trophy, Swords, Target, Gamepad2, Crown, Zap, Clock, Sparkles } from 'lucide-react'
+import { TiltCard, GlowCard } from '../components/VisualEffects'
+import { createPortal } from 'react-dom'
 
 // --- GAME CONFIG ---
 const games = [
@@ -14,14 +16,17 @@ const games = [
 // --- INPUT HELPER ---
 function Input({ label, name, type = 'text', placeholder, req, onChange, caps, inputMode }) {
   return (
-    <div className="space-y-1.5">
-      <label className="text-xs font-semibold uppercase tracking-wider text-purple-200/80">
+    <div className="space-y-1.5 group/input">
+      <label className="text-[11px] font-bold uppercase tracking-wider text-purple-200/80 transition-colors group-focus-within/input:text-purple-400">
         {label} {req && <span className="text-pink-500">*</span>}
       </label>
-      <input type={type} name={name} required={req} placeholder={placeholder} inputMode={inputMode}
-        onChange={(e) => { if (caps) e.target.value = e.target.value.toUpperCase(); onChange(e) }}
-        className={`w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2.5 text-sm text-white focus:border-purple-500 focus:bg-black/60 outline-none transition ${caps ? 'uppercase' : ''}`}
-      />
+      <div className="relative">
+        <input type={type} name={name} required={req} placeholder={placeholder} inputMode={inputMode}
+          onChange={(e) => { if (caps) e.target.value = e.target.value.toUpperCase(); onChange(e) }}
+          className={`w-full rounded-lg border border-white/15 bg-black/60 px-3.5 py-3 text-sm text-white placeholder-gray-600 focus:border-purple-500 focus:bg-black/80 outline-none transition-all duration-300 focus:shadow-[0_0_15px_rgba(168,85,247,0.15)] ${caps ? 'uppercase' : ''}`}
+        />
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-500 to-pink-500 transform scale-x-0 group-focus-within/input:scale-x-100 transition-transform duration-300 rounded-b-lg" />
+      </div>
     </div>
   )
 }
@@ -32,9 +37,14 @@ function PlayerBlock({ title, prefix, onChange, required = false, gameId }) {
   const isBgmi = gameId === 's3_bgmi'
 
   return (
-    <div className={`p-4 rounded-xl border ${required ? 'border-purple-500/30 bg-purple-900/10' : 'border-white/10 bg-white/[0.02]'} space-y-3`}>
-      <h4 className="text-xs font-bold text-purple-300 uppercase">{title}</h4>
-      <div className="grid gap-3 md:grid-cols-2">
+    <div className={`p-5 rounded-2xl border-l-4 transition-all duration-300 bg-black/60 border-y border-r ${required ? 'border-l-purple-500 border-purple-500/20 shadow-[0_0_15px_rgba(168,85,247,0.05)]' : 'border-l-gray-700 border-white/5'} space-y-4`}>
+      <div className="flex items-center justify-between">
+        <h4 className="text-xs font-black text-purple-300 uppercase tracking-widest">{title}</h4>
+        {required && (
+          <span className="rounded-full bg-purple-500/10 border border-purple-500/20 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-purple-300">Required</span>
+        )}
+      </div>
+      <div className="grid gap-4 md:grid-cols-2">
         <Input name={`${prefix}Name`} label="Full Name" placeholder="" req={required} onChange={onChange} caps />
         {isValo ? (
           <Input name={`${prefix}Ign`} label="Riot ID" placeholder="Name#Tag" req={required} onChange={onChange} />
@@ -54,8 +64,8 @@ function PlayerBlock({ title, prefix, onChange, required = false, gameId }) {
 
 // --- SUCCESS MODAL ---
 function SuccessModal({ onClose, gameName }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
         onClick={e => e.stopPropagation()}
         className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a] shadow-2xl">
@@ -92,7 +102,8 @@ function SuccessModal({ onClose, gameName }) {
           </div>
         </div>
       </motion.div>
-    </div>
+    </div>,
+    document.body
   )
 }
 
@@ -102,7 +113,7 @@ export default function Season3() {
   const [formData, setFormData] = useState({})
   const [status, setStatus] = useState('idle')
 
-  const registrationOpen = false // Toggle to false to lock registrations
+  const registrationOpen = true // Toggle to false to lock registrations
 
   const gameConfig = games.find(g => g.id === selectedGame)
 
@@ -180,7 +191,7 @@ export default function Season3() {
   }
 
   return (
-    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} className="space-y-16 pb-12">
+    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} className="space-y-16 pb-12 relative">
 
       {/* SUCCESS MODAL */}
       <AnimatePresence>
@@ -207,25 +218,28 @@ export default function Season3() {
           <div className="inline-block ml-2 rounded border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white">
             May 2026 · Online Tournament
           </div>
-          <h1 className="font-display text-5xl sm:text-7xl font-black uppercase leading-[0.9] text-white tracking-tighter">
-            Play<span className="text-transparent bg-clip-text bg-gradient-to-br from-purple-500 to-pink-500">Storm</span> <span className="block text-4xl sm:text-6xl text-gray-300">Season 3</span>
+          <h1 className="font-display text-7xl sm:text-9xl font-black uppercase leading-[0.85] text-white tracking-tighter">
+            Play<span className="text-transparent bg-clip-text bg-gradient-to-br from-purple-500 to-pink-500">Storm</span> <span className="block text-7xl sm:text-9xl text-white">Season 3</span>
           </h1>
           <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
             Multi-title online esports showdown. 5 games. ₹1,10,000 prize pool. Open to all college students.
           </p>
           <div className="flex flex-wrap justify-center gap-4 pt-2">
-            <div className="rounded-xl border border-purple-500/30 bg-purple-500/10 px-5 py-3 text-center">
-              <div className="font-display text-2xl font-bold text-white">₹1.1L</div>
-              <div className="text-[10px] uppercase tracking-widest text-purple-300">Prize Pool</div>
-            </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-center">
-              <div className="font-display text-2xl font-bold text-white">5</div>
-              <div className="text-[10px] uppercase tracking-widest text-gray-400">Game Titles</div>
-            </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-center">
-              <div className="font-display text-2xl font-bold text-white">₹100</div>
-              <div className="text-[10px] uppercase tracking-widest text-gray-400">Per Person</div>
-            </div>
+            <motion.div whileHover={{ scale: 1.05 }} className="rounded-2xl border border-purple-500/30 bg-purple-500/10 px-6 py-4 text-center shadow-[0_0_20px_rgba(168,85,247,0.1)] relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="font-display text-3xl font-extrabold text-white">₹1.1L</div>
+              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-purple-300 mt-1">Prize Pool</div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} className="rounded-2xl border border-white/15 bg-white/5 px-6 py-4 text-center relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="font-display text-3xl font-extrabold text-white">5</div>
+              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mt-1">Game Titles</div>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} className="rounded-2xl border border-white/15 bg-white/5 px-6 py-4 text-center relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="font-display text-3xl font-extrabold text-white">₹100</div>
+              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mt-1">Per Person</div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -238,18 +252,22 @@ export default function Season3() {
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {games.map(g => (
-            <div key={g.id} className={`rounded-2xl border border-white/10 bg-black/40 p-5 hover:bg-white/5 transition`}>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-display text-lg font-bold text-white">{g.title}</h3>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{g.mode}</span>
-              </div>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-yellow-400">🥇 1st</span><span className="text-white font-bold">{g.prize.split('/')[0].trim()}</span></div>
-                <div className="flex justify-between"><span className="text-gray-400">🥈 2nd</span><span className="text-gray-300">{g.prize.split('/')[1].trim()}</span></div>
-                <div className="flex justify-between"><span className="text-orange-400/60">🥉 3rd</span><span className="text-gray-400">{g.prize.split('/')[2].trim()}</span></div>
-              </div>
-              <div className="mt-3 pt-3 border-t border-white/5 text-[10px] uppercase tracking-widest text-gray-500">{g.format}</div>
-            </div>
+            <TiltCard key={g.id}>
+              <GlowCard className="h-full">
+                <div className={`rounded-2xl border border-white/10 bg-black/60 p-5 h-full transition-all duration-300`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-display text-lg font-bold text-white">{g.title}</h3>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{g.mode}</span>
+                  </div>
+                  <div className="space-y-2.5 text-sm">
+                    <div className="flex justify-between items-center"><span className="text-yellow-400 flex items-center gap-1.5">🥇 <span className="font-medium text-gray-300">1st Place</span></span><span className="text-white font-extrabold">{g.prize.split('/')[0].trim()}</span></div>
+                    <div className="flex justify-between items-center"><span className="text-gray-400 flex items-center gap-1.5">🥈 <span className="font-medium text-gray-300">2nd Place</span></span><span className="text-gray-300 font-bold">{g.prize.split('/')[1].trim()}</span></div>
+                    <div className="flex justify-between items-center"><span className="text-amber-600 flex items-center gap-1.5">🥉 <span className="font-medium text-gray-300">3rd Place</span></span><span className="text-gray-400 font-semibold">{g.prize.split('/')[2].trim()}</span></div>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-white/10 text-[10px] uppercase tracking-[0.15em] text-purple-400 font-bold">{g.format}</div>
+                </div>
+              </GlowCard>
+            </TiltCard>
           ))}
         </div>
       </section>
@@ -262,18 +280,21 @@ export default function Season3() {
           <p className="max-w-2xl text-sm text-gray-300">Select a title below to view details and register.</p>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {games.map(g => (
-            <motion.button key={g.id} onClick={() => handleGameSelect(g.id)} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-              className={`group relative rounded-xl border px-5 py-4 text-left transition ${selectedGame === g.id ? `border-purple-500/60 bg-gradient-to-br ${g.accent}` : `border-white/10 ${g.border}`}`}
-            >
-              <h3 className="font-display text-base font-bold text-white">{g.title}</h3>
-              <p className="mt-1 text-xs text-gray-400">{g.mode} · {g.format.split('·')[0].trim()}</p>
-              <div className="mt-2 flex items-center gap-2">
-                <span className="rounded-full bg-yellow-500/10 border border-yellow-500/20 px-2 py-0.5 text-[10px] font-bold text-yellow-300">{g.prize.split('/')[0].trim()}</span>
-                <span className="text-[10px] text-gray-500">{g.fee}</span>
-              </div>
-            </motion.button>
+            <TiltCard key={g.id}>
+              <GlowCard
+                onClick={() => handleGameSelect(g.id)}
+                className={`group relative w-full h-full rounded-xl border px-5 py-4 text-left transition-all duration-300 cursor-pointer ${selectedGame === g.id ? `border-purple-500/60 bg-gradient-to-br ${g.accent}` : `border-white/10 bg-black/60 backdrop-blur-md ${g.border}`}`}
+              >
+                <h3 className="font-display text-base font-bold text-white">{g.title}</h3>
+                <p className="mt-1 text-xs text-gray-400">{g.mode} · {g.format.split('·')[0].trim()}</p>
+                <div className="mt-2 flex items-center gap-2">
+                  <span className="rounded-full bg-yellow-500/10 border border-yellow-500/20 px-2 py-0.5 text-[10px] font-bold text-yellow-300">{g.prize.split('/')[0].trim()}</span>
+                  <span className="text-[10px] text-gray-500">{g.fee}</span>
+                </div>
+              </GlowCard>
+            </TiltCard>
           ))}
         </div>
       </section>
@@ -307,7 +328,7 @@ export default function Season3() {
       <AnimatePresence mode="wait">
         {selectedGame && gameConfig && registrationOpen && (
           <motion.form key={selectedGame} onSubmit={handleSubmit} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-            className="space-y-6 rounded-xl border border-white/10 bg-black/40 p-6">
+            className="space-y-6 rounded-xl border border-white/10 bg-black/60 p-6">
 
             {/* Game Info Banner */}
             <div className="rounded-xl border border-purple-500/30 bg-purple-900/10 p-4 space-y-2">

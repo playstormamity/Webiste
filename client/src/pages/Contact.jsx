@@ -1,30 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, MapPin, CalendarDays, Instagram, Youtube, Linkedin } from 'lucide-react'
-
-// --- HELPER COMPONENTS ---
-
-function PageHeader({ eyebrow, title, description }) {
-  return (
-    <div className="space-y-3">
-      <p className="font-display text-[11px] uppercase tracking-[0.26em] text-purple-300">{eyebrow}</p>
-      <h2 className="font-display text-2xl text-white sm:text-3xl">{title}</h2>
-      <p className="max-w-2xl text-sm text-gray-200 sm:text-base">{description}</p>
-    </div>
-  )
-}
-
-function InfoRow({ icon, label, value }) {
-  return (
-    <div className="flex items-start gap-3">
-      <div className="mt-0.5 text-purple-200">{icon}</div>
-      <div>
-        <p className="text-[11px] uppercase tracking-[0.22em] text-gray-400">{label}</p>
-        <p className="text-xs text-gray-100">{value}</p>
-      </div>
-    </div>
-  )
-}
+import { Mail, MapPin, CalendarDays, Instagram, Youtube, Linkedin, Sparkles, Send, Globe, Phone } from 'lucide-react'
+import { TiltCard, GlowCard, MagneticElement, playTactileClick, playDigitalHover, CursorPhysicsDistortion } from '../components/VisualEffects'
 
 function DiscordPill() {
   return (
@@ -35,20 +12,6 @@ function DiscordPill() {
     </span>
   )
 }
-
-function SocialPill({ icon, label }) {
-  return (
-    <button
-      type="button"
-      className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-gray-100 hover:border-purple-400 transition"
-    >
-      <span className="text-purple-200">{icon}</span>
-      {label}
-    </button>
-  )
-}
-
-// --- MAIN COMPONENT ---
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -73,14 +36,12 @@ export default function Contact() {
     setIsSubmitting(true)
     setSubmitStatus(null)
 
-    // The webhook URL is now securely stored on the backend
-
     const embed = {
       title: '🎮 New Contact Form Submission',
       color: 0x8b5cf6,
       fields: [
         { name: '👤 Name', value: formData.name || 'Not provided', inline: true },
-        { name: '🎓 Enrollment/Program', value: formData.enrollment || 'Not provided', inline: true },
+        { name: '📞 Phone Number', value: formData.enrollment || 'Not provided', inline: true },
         { name: '📧 Email', value: formData.email || 'Not provided', inline: false },
         { name: '🎯 Interest', value: formData.interest || 'Not provided', inline: true },
         { name: '💬 Message', value: formData.message || 'Not provided', inline: false },
@@ -120,177 +81,280 @@ export default function Contact() {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -16 }}
-      transition={{ duration: 0.45 }}
-      className="space-y-10"
+      transition={{ duration: 0.45, ease: 'easeOut' }}
+      className="space-y-12"
     >
-      <PageHeader
-        eyebrow="Contact"
-        title="Reach out to the Playstorm core team."
-        description="Fill out the form below and we'll get back to you as soon as possible."
-      />
-
-      <div className="grid gap-8 md:grid-cols-[3fr,2fr]">
-        <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-purple-500/40 bg-black/40 p-5 text-sm text-gray-200">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-200">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Your full name"
-                required
-                className="w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-sm text-gray-100 outline-none ring-0 placeholder:text-gray-500 focus:border-purple-400"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-200">Phone Number</label>
-              <input
-                type="text"
-                name="enrollment"
-                value={formData.enrollment}
-                onChange={handleChange}
-                placeholder="e.g. Whatsapp Number"
-                required
-                className="w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-sm text-gray-100 outline-none ring-0 placeholder:text-gray-500 focus:border-purple-400"
-              />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-200">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="playstorm@s.amity.edu"
-              required
-              className="w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-sm text-gray-100 outline-none ring-0 placeholder:text-gray-500 focus:border-purple-400"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-200">What are you interested in?</label>
-            <input
-              type="text"
-              name="interest"
-              value={formData.interest}
-              onChange={handleChange}
-              placeholder="Apply for team, collaboration, partnership, business enquiry, etc."
-              required
-              className="w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-sm text-gray-100 outline-none ring-0 placeholder:text-gray-500 focus:border-purple-400"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-gray-200">Tell us a bit more</label>
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              rows={4}
-              placeholder="Tell us about your background, experience, or your specific inquiry…"
-              required
-              className="w-full rounded-xl border border-white/15 bg-black/60 px-3 py-2 text-sm text-gray-100 outline-none ring-0 placeholder:text-gray-500 focus:border-purple-400"
-            />
-          </div>
-
-          {submitStatus === 'success' && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-xl bg-emerald-500/20 border border-emerald-500/40 px-4 py-3 text-xs text-emerald-200"
-            >
-              ✓ Form submitted successfully! We'll get back to you soon.
-            </motion.div>
-          )}
-
-          {submitStatus === 'error' && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-xl bg-red-500/20 border border-red-500/40 px-4 py-3 text-xs text-red-200"
-            >
-              ✗ Something went wrong. Please try again or contact us directly.
-            </motion.div>
-          )}
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-lg shadow-purple-500/30 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Mail className="h-4 w-4" />
-            {isSubmitting ? 'Submitting...' : 'Submit'}
-          </button>
-        </form>
-
-        <div className="space-y-5 text-xs text-gray-200">
-          <div className="rounded-2xl border border-purple-500/40 bg-black/40 p-4">
-            <h3 className="font-display text-[11px] uppercase tracking-[0.22em] text-purple-200">
-              Quick info
-            </h3>
-            <div className="mt-3 space-y-2">
-              <InfoRow icon={<Mail className="h-3.5 w-3.5" />} label="Email" value="playstorm.amity@gmail.com" />
-              <InfoRow
-                icon={<MapPin className="h-3.5 w-3.5" />}
-                label="On-campus"
-                value="Amity University · Noida"
-              />
-              <InfoRow
-                icon={<CalendarDays className="h-3.5 w-3.5" />}
-                label="Office hours"
-                value="Post-classes · Evenings & weekends."
-              />
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
-            <h3 className="font-display text-[11px] uppercase tracking-[0.22em] text-purple-200">
-              Socials
-            </h3>
-            <div className="mt-3 flex flex-wrap gap-3">
-              <a
-                href="https://discord.gg/eAqXkxgTF"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-gray-100 hover:border-purple-400 transition"
-              >
-                <DiscordPill />
-                Discord server
-              </a>
-              <a
-                href="https://www.instagram.com/playstorm.amity/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-gray-100 hover:border-purple-400 transition"
-              >
-                <span className="text-purple-200"><Instagram className="h-3.5 w-3.5" /></span>
-                instagram
-              </a>
-              <a
-                href="https://www.youtube.com/@PlaystormAmity"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-gray-100 hover:border-purple-400 transition"
-              >
-                <span className="text-purple-200"><Youtube className="h-3.5 w-3.5" /></span>
-                youtube
-              </a>
-              <a
-                href="https://www.linkedin.com/company/playstorm-amity-auup"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-gray-100 hover:border-purple-400 transition"
-              >
-                <span className="text-purple-200"><Linkedin className="h-3.5 w-3.5" /></span>
-                LinkedIn
-              </a>
-            </div>
-          </div>
+      {/* 1. LOOKSMAXED HEADER */}
+      <div className="space-y-4 relative lg:max-w-full">
+        <div className="absolute -top-12 -left-10 w-44 h-44 bg-purple-500/10 rounded-full blur-[60px] pointer-events-none" />
+        <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-1.5 backdrop-blur-md text-[10px] font-mono font-black uppercase tracking-[0.25em] text-purple-300">
+          <Sparkles className="w-3.5 h-3.5 text-pink-400 animate-pulse" />
+          <span>Get in touch</span>
         </div>
+        
+        <div>
+          <CursorPhysicsDistortion>
+            <h1 className="font-display text-3xl font-black tracking-tighter text-white sm:text-5xl uppercase">
+              Reach Out <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]">Core Team</span>
+            </h1>
+          </CursorPhysicsDistortion>
+        </div>
+        
+        <p className="max-w-full text-sm leading-relaxed text-gray-300 sm:text-base border-l-2 border-purple-500/50 pl-4 py-1">
+          Have an inquiry, partnership proposal, or want to join the ranks? Send us a direct encrypted telemetry link below, and our commanders will establish contact.
+        </p>
+      </div>
+
+      {/* 2. LOOKSMAXED FORM & TELEMETRY GRID */}
+      <div className="grid gap-8 lg:grid-cols-[3fr,2fr] items-start">
+        
+        {/* LEFT COLUMN: Premium Glow Form */}
+        <GlowCard className="p-6 rounded-2xl border border-white/10 bg-black/60 backdrop-blur-xl relative overflow-hidden group shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-[40px] pointer-events-none" />
+          
+          <form onSubmit={handleSubmit} className="space-y-5 text-sm text-gray-200">
+            <div className="grid gap-4 sm:grid-cols-2">
+              
+              {/* Name Field */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase tracking-wider text-gray-500 font-mono font-bold">Your Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="John Doe"
+                  required
+                  className="w-full rounded-xl border border-white/10 bg-black/60 px-3.5 py-2.5 text-xs text-white outline-none placeholder:text-gray-600 focus:border-purple-500 focus:bg-black/80 transition shadow-inner font-mono"
+                />
+              </div>
+
+              {/* Phone Field */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase tracking-wider text-gray-500 font-mono font-bold">WhatsApp / Phone</label>
+                <input
+                  type="text"
+                  name="enrollment"
+                  value={formData.enrollment}
+                  onChange={handleChange}
+                  placeholder="+91 XXXXX XXXXX"
+                  required
+                  className="w-full rounded-xl border border-white/10 bg-black/60 px-3.5 py-2.5 text-xs text-white outline-none placeholder:text-gray-600 focus:border-purple-500 focus:bg-black/80 transition shadow-inner font-mono"
+                />
+              </div>
+
+            </div>
+
+            {/* Email Field */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] uppercase tracking-wider text-gray-500 font-mono font-bold">Encrypted Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="you@s.amity.edu"
+                required
+                className="w-full rounded-xl border border-white/10 bg-black/60 px-3.5 py-2.5 text-xs text-white outline-none placeholder:text-gray-600 focus:border-purple-500 focus:bg-black/80 transition shadow-inner font-mono"
+              />
+            </div>
+
+            {/* Interest Field */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] uppercase tracking-wider text-gray-500 font-mono font-bold">Inquiry Classification</label>
+              <input
+                type="text"
+                name="interest"
+                value={formData.interest}
+                onChange={handleChange}
+                placeholder="Apply for team, Collaboration, Sponsoring fests, etc."
+                required
+                className="w-full rounded-xl border border-white/10 bg-black/60 px-3.5 py-2.5 text-xs text-white outline-none placeholder:text-gray-600 focus:border-purple-500 focus:bg-black/80 transition shadow-inner font-mono"
+              />
+            </div>
+
+            {/* Message Field */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] uppercase tracking-wider text-gray-500 font-mono font-bold">Communication Data Payload</label>
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                rows={5}
+                placeholder="Provide a detailed overview of your request or background info…"
+                required
+                className="w-full rounded-xl border border-white/10 bg-black/60 px-3.5 py-2.5 text-xs text-white outline-none placeholder:text-gray-600 focus:border-purple-500 focus:bg-black/80 transition shadow-inner font-mono resize-none"
+              />
+            </div>
+
+            {/* Submit Status Popups */}
+            {submitStatus === 'success' && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl bg-emerald-500/10 border border-emerald-500/30 px-4 py-3 text-[11px] text-emerald-300 font-mono"
+              >
+                ✓ UPLINK SECURED: Telemetry successfully beamed to Core! We'll reply soon.
+              </motion.div>
+            )}
+
+            {submitStatus === 'error' && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl bg-red-500/10 border border-red-500/30 px-4 py-3 text-[11px] text-red-300 font-mono"
+              >
+                ✗ UPLINK FAILED: Connection interrupted. Please re-establish sync or email directly.
+              </motion.div>
+            )}
+
+            {/* Submit Button */}
+            <div className="pt-2">
+              <MagneticElement>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  onClick={playTactileClick}
+                  onMouseEnter={playDigitalHover}
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-purple-500/30 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition duration-300 border border-white/15"
+                >
+                  <Send className="h-3.5 w-3.5" />
+                  {isSubmitting ? 'Beaming Uplink...' : 'Establish Link'}
+                </button>
+              </MagneticElement>
+            </div>
+
+          </form>
+        </GlowCard>
+
+        {/* RIGHT COLUMN: 3D Tilt Card with Spacers */}
+        <TiltCard className="h-fit relative z-20">
+          <GlowCard className="p-6 rounded-2xl border border-purple-500/30 bg-black/60 backdrop-blur-xl relative overflow-hidden shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+            <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-[40px] pointer-events-none" />
+            
+            <h3 className="font-display text-xs uppercase tracking-[0.24em] text-purple-300 font-black mb-4 border-b border-white/10 pb-3">
+              Quick Info
+            </h3>
+
+            <ul className="space-y-4">
+              
+              {/* Direct Mail */}
+              <li className="flex gap-3 group">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 flex-shrink-0 group-hover:bg-purple-500/20 transition-all duration-300">
+                  <Mail className="h-3.5 w-3.5" />
+                </div>
+                <div>
+                  <h4 className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Mailbox Address</h4>
+                  <p className="text-[11px] font-bold text-white font-mono mt-0.5">playstorm.amity@gmail.com</p>
+                </div>
+              </li>
+
+              {/* HQ */}
+              <li className="flex gap-3 group">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 flex-shrink-0 group-hover:bg-pink-500/20 transition-all duration-300">
+                  <MapPin className="h-3.5 w-3.5" />
+                </div>
+                <div>
+                  <h4 className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Coordinates (HQ)</h4>
+                  <p className="text-[11px] font-bold text-white font-mono mt-0.5">Amity University · Noida</p>
+                </div>
+              </li>
+
+              {/* Duty */}
+              <li className="flex gap-3 group">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 flex-shrink-0 group-hover:bg-blue-500/20 transition-all duration-300">
+                  <CalendarDays className="h-3.5 w-3.5" />
+                </div>
+                <div>
+                  <h4 className="text-[9px] uppercase tracking-wider text-gray-500 font-bold">Duty Cycle</h4>
+                  <p className="text-[11px] font-bold text-white font-mono mt-0.5">Post-Classes · Evenings & Weekends</p>
+                </div>
+              </li>
+
+            </ul>
+
+            {/* Social Grid */}
+            <div className="mt-6 pt-5 border-t border-white/10">
+              <div className="font-display text-[9px] uppercase tracking-[0.24em] text-purple-300 font-bold mb-4">
+                Establish Comms
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                
+                {/* Discord */}
+                <MagneticElement>
+                  <a 
+                    href="https://discord.gg/eAqXkxgTF" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    onClick={playTactileClick}
+                    onMouseEnter={playDigitalHover}
+                    className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/60 p-2.5 text-xs text-white hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-indigo-500/10 hover:border-purple-500/30 transition-all duration-300 w-full"
+                  >
+                    <DiscordPill />
+                    <span className="text-[10px] font-bold uppercase tracking-wider font-mono">Discord</span>
+                  </a>
+                </MagneticElement>
+
+                {/* Instagram */}
+                <MagneticElement>
+                  <a 
+                    href="https://www.instagram.com/playstorm.amity/" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    onClick={playTactileClick}
+                    onMouseEnter={playDigitalHover}
+                    className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/60 p-2.5 text-xs text-white hover:bg-gradient-to-r hover:from-pink-500/10 hover:to-purple-500/10 hover:border-pink-500/30 transition-all duration-300 w-full"
+                  >
+                    <Instagram className="h-4 w-4 text-pink-400" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider font-mono">Instagram</span>
+                  </a>
+                </MagneticElement>
+
+                {/* Youtube */}
+                <MagneticElement>
+                  <a 
+                    href="https://www.youtube.com/@PlaystormAmity" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    onClick={playTactileClick}
+                    onMouseEnter={playDigitalHover}
+                    className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/60 p-2.5 text-xs text-white hover:bg-gradient-to-r hover:from-red-500/10 hover:to-pink-500/10 hover:border-red-500/30 transition-all duration-300 w-full"
+                  >
+                    <Youtube className="h-4 w-4 text-red-400" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider font-mono">YouTube</span>
+                  </a>
+                </MagneticElement>
+
+                {/* Linkedin */}
+                <MagneticElement>
+                  <a 
+                    href="https://www.linkedin.com/company/playstorm-amity-auup" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    onClick={playTactileClick}
+                    onMouseEnter={playDigitalHover}
+                    className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/60 p-2.5 text-xs text-white hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-cyan-500/10 hover:border-blue-500/30 transition-all duration-300 w-full"
+                  >
+                    <Linkedin className="h-4 w-4 text-blue-400" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider font-mono">LinkedIn</span>
+                  </a>
+                </MagneticElement>
+
+              </div>
+            </div>
+
+            {/* Glowing Tag */}
+            <div className="mt-6 pt-4 border-t border-white/5 text-center flex flex-col items-center gap-1.5 select-none">
+              <span className="text-[10px] font-mono font-black uppercase tracking-[0.25em] text-pink-400 drop-shadow-[0_0_8px_rgba(244,63,94,0.6)] animate-pulse">#PlaystormOnTop</span>
+              <p className="text-[10px] text-gray-500 font-mono">
+                Made for <span className="text-purple-400/80 font-bold">Playstorm Esports Club</span>
+              </p>
+            </div>
+
+          </GlowCard>
+        </TiltCard>
+
       </div>
     </motion.div>
   )

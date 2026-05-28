@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, X } from 'lucide-react'
+import { CheckCircle, X, Sparkles, Send, Shield, Zap, Target } from 'lucide-react'
+import { TiltCard, GlowCard, MagneticElement, playTactileClick, playDigitalHover, CursorPhysicsDistortion } from '../components/VisualEffects'
+
 import arenaBgmi from '../assets/arena_bgmi1.webp'
 import arenaValo from '../assets/arena_valo1.webp'
 import arenaDota from '../assets/arena_dota1.webp'
@@ -8,26 +10,6 @@ import arenaMlbb from '../assets/arena_mlbb1.webp'
 import arenaCs from '../assets/arena_cs1.webp'
 import arenaFfm from '../assets/arena_ffm1.webp'
 import arenaCodm from '../assets/arena_codm1.webp'
-
-// Helper Component for Header
-const PageHeader = () => (
-  <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/60 px-5 py-6 sm:px-8 sm:py-7 backdrop-blur-md">
-    <div className="absolute right-0 top-0 h-40 w-40 translate-x-1/3 -translate-y-1/3 rounded-full bg-purple-600/40 blur-3xl" />
-    <div className="absolute left-0 bottom-0 h-32 w-32 -translate-x-1/3 translate-y-1/3 rounded-full bg-pink-500/30 blur-3xl" />
-
-    <div className="relative space-y-3">
-      <p className="font-display text-[11px] uppercase tracking-[0.26em] text-purple-300">
-        #Lineups · Competitive Games
-      </p>
-      <h2 className="font-display text-3xl sm:text-4xl text-white">
-        Lineups Registration
-      </h2>
-      <p className="max-w-2xl text-sm text-gray-300 sm:text-base">
-        Apply for BGMI, Valorant, Dota 2, MLBB, Free Fire MAX, CS2 and CODM lineups. Shortlisted players will be contacted for tryouts and scrims.
-      </p>
-    </div>
-  </div>
-)
 
 const pageTransition = {
   initial: { opacity: 0, y: 16 },
@@ -38,7 +20,6 @@ const pageTransition = {
 const games = [
   { id: 'lineups_bgmi', title: 'Battlegrounds Mobile India', short: 'BGMI', bg: arenaBgmi },
   { id: 'lineups_valorant', title: 'VALORANT', short: 'VALORANT', bg: arenaValo },
-  // Temporary: reuse BGMI / VALO visuals for now – to be replaced with per‑game art
   { id: 'lineups_dota2', title: 'Dota 2', short: 'DOTA 2', bg: arenaDota },
   { id: 'lineups_mlbb', title: 'Mobile Legends: Bang Bang', short: 'MLBB', bg: arenaMlbb },
   { id: 'lineups_freefire_max', title: 'Free Fire MAX', short: 'FREE FIRE MAX', bg: arenaFfm },
@@ -86,7 +67,7 @@ function SuccessModal({ onClose }) {
             {/* Icon */}
             <div className="flex justify-center">
               <div className="relative">
-                <div className="w-16 h-16 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center animate-pulse">
                   <CheckCircle className="w-7 h-7 text-purple-400" strokeWidth={1.5} />
                 </div>
                 <div className="absolute inset-0 rounded-full bg-purple-500/10 blur-xl" />
@@ -96,8 +77,8 @@ function SuccessModal({ onClose }) {
             {/* Text */}
             <div className="text-center space-y-2">
               <h3 className="font-display text-2xl text-white tracking-tight">Lineups application received</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Thanks for registering. Your details have been sent to the Playstorm Lineups team for review.
+              <p className="text-sm text-gray-400 leading-relaxed font-mono">
+                Thanks for registering. Your details have been sent to the Playstorm Lineups team for tryout scheduling.
               </p>
             </div>
 
@@ -106,34 +87,39 @@ function SuccessModal({ onClose }) {
 
             {/* WhatsApp CTA */}
             <div className="space-y-3">
-              <p className="text-[11px] font-bold uppercase tracking-widest text-gray-500 text-center">Stay in the loop</p>
-              <a
-                href="https://chat.whatsapp.com/I8kG0tt6DCc9yL5eyZgpEe"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-between w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-semibold text-white hover:bg-white/10 hover:border-white/20 transition"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-[#25D366]/15 border border-[#25D366]/30 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                    </svg>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 text-center font-mono">Stay in communication</p>
+              
+              <MagneticElement>
+                <a
+                  href="https://chat.whatsapp.com/I8kG0tt6DCc9yL5eyZgpEe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={playTactileClick}
+                  onMouseEnter={playDigitalHover}
+                  className="group flex items-center justify-between w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-semibold text-white hover:bg-white/10 hover:border-white/20 transition duration-300"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#25D366]/15 border border-[#25D366]/30 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-4 h-4 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">Join WhatsApp Group</p>
+                      <p className="text-[11px] text-gray-500 font-mono">Updates & announcements</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-white">Join WhatsApp Group</p>
-                    <p className="text-[11px] text-gray-500">Updates & announcements</p>
-                  </div>
-                </div>
-                <svg className="w-4 h-4 text-gray-500 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </a>
+                  <svg className="w-4 h-4 text-gray-500 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </MagneticElement>
 
               <button
                 onClick={onClose}
-                className="w-full rounded-xl border border-white/8 px-4 py-2.5 text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-gray-300 hover:border-white/15 transition"
+                className="w-full rounded-xl border border-white/8 px-4 py-2.5 text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-gray-300 hover:border-white/15 transition font-mono"
               >
-                Close
+                Close Window
               </button>
             </div>
           </div>
@@ -155,6 +141,7 @@ export default function Lineups() {
   }
 
   const handleGameSelect = (id) => {
+    playTactileClick()
     setGameTitle(id)
     setFormData({})
     setStatus('idle')
@@ -319,7 +306,8 @@ export default function Lineups() {
       initial={pageTransition.initial}
       animate={pageTransition.animate}
       exit={pageTransition.exit}
-      className="relative space-y-10 px-4 py-6 text-[#E8EEF4] sm:px-6 sm:py-8"
+      transition={{ duration: 0.45, ease: 'easeOut' }}
+      className="space-y-12 pb-12"
     >
 
       {/* SUCCESS MODAL */}
@@ -331,355 +319,399 @@ export default function Lineups() {
         }} />
       )}
 
-      {/* PAGE HEADER */}
-      <div className="relative z-10">
-        <PageHeader />
-      </div>
-
-      {/* INFO / CONTEXT ROW – softer, matches home */}
-      <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex flex-wrap items-center gap-2 text-[11px] font-display uppercase tracking-[0.26em] text-purple-200">
-          <span className="rounded-full border border-white/10 bg-black/40 px-3 py-1">#Lineups</span>
-          <span className="rounded-full border border-white/10 bg-black/40 px-3 py-1">Competitive Trials</span>
-          <span className="rounded-full border border-white/10 bg-black/40 px-3 py-1">Amity University Noida</span>
+      {/* 1. LOOKSMAXED HEADER */}
+      <div className="space-y-4 relative lg:max-w-[58%]">
+        <div className="absolute -top-12 -left-10 w-44 h-44 bg-purple-500/10 rounded-full blur-[60px] pointer-events-none" />
+        <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-1.5 backdrop-blur-md text-[10px] font-mono font-black uppercase tracking-[0.25em] text-purple-300">
+          <Sparkles className="w-3.5 h-3.5 text-pink-400 animate-pulse" />
+          <span>Competitive Tryouts</span>
         </div>
-        <p className="max-w-xl text-[12px] sm:text-sm text-gray-300">
-          One clean form per game. Pick your title, drop your real details, and we&apos;ll reach out on WhatsApp / Discord if you match what the roster needs.
+        
+        <div>
+          <CursorPhysicsDistortion>
+            <h1 className="font-display text-3xl font-black tracking-tight text-white sm:text-5xl uppercase">
+              Lineups <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]">Registration</span> ⚔️
+            </h1>
+          </CursorPhysicsDistortion>
+        </div>
+        
+        <p className="max-w-full text-sm leading-relaxed text-gray-300 sm:text-base border-l-2 border-purple-500/50 pl-4 py-1">
+          Apply for the competitive BGMI, Valorant, Dota 2, MLBB, Free Fire MAX, CS2, or CODM rosters. Shortlisted players will proceed to live campus tryouts and collegiate scrims.
         </p>
       </div>
 
-      {/* GAME SELECTION CARDS – minimal info, just game select */}
-      <div className="relative z-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* INFO / CONTEXT ROW */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-t border-b border-white/5 py-4">
+        <div className="flex flex-wrap items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-purple-300">
+          <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1">#Lineups</span>
+          <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1">Competitive Trials</span>
+          <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1">Amity Noida</span>
+        </div>
+        <p className="max-w-xl text-xs md:text-sm text-gray-400 leading-relaxed font-mono">
+          Pick your primary game title below, enter your active competitive details, and submit to transmit your tryout profile directly to our Department Leads.
+        </p>
+      </div>
+
+      {/* GAME SELECTION CARDS – Warp in 3D TiltCards */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {games.map((game, index) => (
-          <motion.button
-            key={game.id}
-            onClick={() => handleGameSelect(game.id)}
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.08 * index }}
-            whileHover={{ y: -4 }}
-            whileTap={{ scale: 0.97 }}
-            className={`group relative flex h-40 flex-col justify-between overflow-hidden rounded-3xl border px-4 py-4 text-left transition backdrop-blur-sm sm:h-44
-              ${gameTitle === game.id
-                ? 'border-purple-400 bg-black/60 shadow-2xl shadow-purple-900/40'
-                : 'border-white/10 bg-black/50 hover:border-purple-400'}
-            `}
-          >
-            {/* Background image for featured games */}
-            {game.bg && (
-              <div className="pointer-events-none absolute inset-0 -z-10">
-                <img
-                  src={game.bg}
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                  className="h-full w-full object-cover opacity-35 group-hover:opacity-45 transition duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80" />
+          <TiltCard key={game.id}>
+            <GlowCard
+              onClick={() => handleGameSelect(game.id)}
+              onMouseEnter={playDigitalHover}
+              className={`group relative flex h-40 flex-col justify-between overflow-hidden rounded-2xl border px-4 py-4 text-left transition duration-300 cursor-pointer w-full select-none
+                ${gameTitle === game.id
+                  ? 'border-purple-400 bg-black/60 shadow-2xl shadow-purple-900/40'
+                  : 'border-white/10 bg-black/50 hover:border-purple-400'}
+              `}
+            >
+              {/* Background image for games */}
+              {game.bg && (
+                <div className="pointer-events-none absolute inset-0 -z-10">
+                  <img
+                    src={game.bg}
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    className="h-full w-full object-cover opacity-25 group-hover:opacity-40 transition duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80" />
+                </div>
+              )}
+
+              <div className="space-y-1 relative z-10">
+                <h3 className="font-['Rajdhani',sans-serif] text-xl sm:text-2xl font-bold leading-tight tracking-[0.14em] text-[#F9FAFB] uppercase">
+                  {game.short}
+                </h3>
+                <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-purple-200/80">
+                  {game.title}
+                </p>
               </div>
-            )}
 
-            <div className="space-y-1 relative z-10">
-              <h3 className="font-['Rajdhani',sans-serif] text-xl sm:text-2xl font-semibold leading-tight tracking-[0.14em] text-[#F9FAFB]">
-                {game.short}
-              </h3>
-              <p className="text-[11px] font-['Share_Tech_Mono',monospace] uppercase tracking-[0.22em] text-purple-200/80">
-                {game.title}
-              </p>
-            </div>
-
-            {/* Border pulse on hover */}
-            <div className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition group-hover:opacity-100">
-              <div className="absolute inset-0 rounded-xl border border-purple-400/40 blur-[1px]" />
-            </div>
-          </motion.button>
+              {/* Pulsing neon badge status */}
+              <div className="relative z-10 flex items-center gap-1.5 self-start rounded-full bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 text-[9px] uppercase tracking-widest text-purple-300 font-mono">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping" /> open
+              </div>
+            </GlowCard>
+          </TiltCard>
         ))}
       </div>
 
       {/* FORM SECTION */}
-      {gameTitle && (
-        <motion.form
-          onSubmit={handleSubmit}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative z-10 space-y-6 rounded-3xl border border-white/10 bg-black/60 p-6 sm:p-7 backdrop-blur-md shadow-2xl shadow-black/60"
-        >
+      <AnimatePresence>
+        {gameTitle && (
+          <motion.form
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            className="space-y-6 rounded-3xl border border-white/10 bg-black/60 p-6 sm:p-8 backdrop-blur-md shadow-2xl shadow-black/60 relative overflow-hidden"
+          >
+            {/* Ambient form backgrounds */}
+            <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-500/5 rounded-full blur-[80px] pointer-events-none" />
 
-          {/* BGMI FORM */}
-          {gameTitle === 'lineups_bgmi' && (
-            <div className="space-y-4">
-              <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-orange-300">
-                BGMI Lineups · Mobile Squad
-              </h4>
-              <Input name="bgmiIgn" label="BGMI IGN" placeholder="e.g. PlayerName" req onChange={handleChange} caps />
-              <Input name="bgmiUid" label="UID" placeholder="Your in-game UID" req onChange={handleChange} />
-              <Input name="bgmiFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
-              <Input name="bgmiPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
-              <Input name="bgmiEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
-              <Input name="bgmiEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
-              <Input name="bgmiDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
-              <TextArea
-                name="bgmiWhy"
-                label="Why you want to be part of Lineups"
-                placeholder="Tell us your mindset, goals, and what you bring to the roster."
-                req
-                onChange={handleChange}
-              />
-              <TextArea
-                name="bgmiExperience"
-                label="Experience (optional)"
-                placeholder="Share past teams, tournaments, or clutch moments. Keep it concise but specific."
-                onChange={handleChange}
-                hint="Optional, but helps staff understand your level."
-              />
-              <label className="flex items-start gap-2 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3 text-yellow-100">
-                <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
-                <span>I confirm that the details entered are accurate and I am available for lineup training and matches.</span>
-              </label>
+            {/* BGMI FORM */}
+            {gameTitle === 'lineups_bgmi' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5 border-b border-white/5 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+                  <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-orange-300">
+                    BGMI Lineups · Mobile Squad Tryout Form
+                  </h4>
+                </div>
+                <Input name="bgmiIgn" label="BGMI IGN" placeholder="e.g. PlayerName" req onChange={handleChange} caps />
+                <Input name="bgmiUid" label="UID" placeholder="Your in-game UID" req onChange={handleChange} />
+                <Input name="bgmiFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
+                <Input name="bgmiPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
+                <Input name="bgmiEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
+                <Input name="bgmiEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
+                <Input name="bgmiDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
+                <TextArea
+                  name="bgmiWhy"
+                  label="Why you want to join Playstorm Lineups"
+                  placeholder="Tell us your competitive mindset, goals, and what you bring to the roster."
+                  req
+                  onChange={handleChange}
+                />
+                <TextArea
+                  name="bgmiExperience"
+                  label="Competitive Experience (optional)"
+                  placeholder="Share past teams, tournaments, scrim accomplishments, or clutch moments."
+                  onChange={handleChange}
+                  hint="Optional, but highly helpful for trial scouts."
+                />
+                <label className="flex items-start gap-2.5 text-xs rounded-xl border border-yellow-500/30 bg-yellow-900/20 p-3.5 text-yellow-100 font-mono">
+                  <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
+                  <span>I confirm that the details entered are accurate and I am available for lineup trials and matches.</span>
+                </label>
+              </div>
+            )}
+
+            {/* VALORANT FORM */}
+            {gameTitle === 'lineups_valorant' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5 border-b border-white/5 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+                  <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-red-300">
+                    Valorant Lineups · Tactical FPS Tryout Form
+                  </h4>
+                </div>
+                <Input name="valoIgnTag" label="PLAYER IGN+Tag" placeholder="e.g. Player#1234" req onChange={handleChange} caps />
+                <Input name="valoRank" label="PLAYER RANK (Current / Peak)" placeholder="Current: ... | Peak: ..." req onChange={handleChange} />
+                <Input name="valoDiscordUserId" label="DISCORD UserID" placeholder="e.g. 1234567890" req onChange={handleChange} />
+                <Input name="valoRoles" label="Roles" placeholder="e.g. Duelist / Initiator / Controller" req onChange={handleChange} caps />
+                <Input name="valoFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
+                <Input name="valoPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
+                <Input name="valoEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
+                <Input name="valoEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
+                <Input name="valoDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
+                <Input name="valoTracker" label="Valo Tracker Link" placeholder="https://tracker.gg/valorant/..." type="url" req onChange={handleChange} />
+                <TextArea
+                  name="valoWhy"
+                  label="Why you want to join Playstorm Lineups"
+                  placeholder="What kind of competitive role do you see yourself in, and why Playstorm?"
+                  req
+                  onChange={handleChange}
+                />
+                <TextArea
+                  name="valoExperience"
+                  label="Competitive Experience (optional)"
+                  placeholder="Any previous teams, tournament accomplishments, or custom scrim performance."
+                  onChange={handleChange}
+                  hint="Optional, but highly helpful for trial scouts."
+                />
+                <label className="flex items-start gap-2.5 text-xs rounded-xl border border-yellow-500/30 bg-yellow-900/20 p-3.5 text-yellow-100 font-mono">
+                  <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
+                  <span>I confirm that I will follow tryout training schedules and participate in matches when selected.</span>
+                </label>
+              </div>
+            )}
+
+            {/* DOTA 2 FORM */}
+            {gameTitle === 'lineups_dota2' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5 border-b border-white/5 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+                  <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-blue-300">
+                    Dota 2 Lineups · MOBA Tryout Form
+                  </h4>
+                </div>
+                <Input name="dotaIgn" label="IGN" placeholder="e.g. PlayerName" req onChange={handleChange} caps />
+                <Input name="dotaUid" label="UID" placeholder="Your in-game UID" req onChange={handleChange} />
+                <Input name="dotaRank" label="PLAYER RANK" placeholder="Current rank / peak rank" req onChange={handleChange} />
+                <Input name="dotaFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
+                <Input name="dotaPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
+                <Input name="dotaEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
+                <Input name="dotaEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
+                <Input name="dotaDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
+                <TextArea
+                  name="dotaWhy"
+                  label="Why you want to join Playstorm Lineups"
+                  placeholder="Share how you play around your stack and what you bring to drafting."
+                  req
+                  onChange={handleChange}
+                />
+                <TextArea
+                  name="dotaExperience"
+                  label="Competitive Experience (optional)"
+                  placeholder="Mention past stacks, captaining experience, or tournaments played."
+                  onChange={handleChange}
+                  hint="Optional, but highly helpful for trial scouts."
+                />
+                <label className="flex items-start gap-2.5 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3.5 text-yellow-100 font-mono">
+                  <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
+                  <span>I confirm that I am available for lineup tryouts and competitive matches.</span>
+                </label>
+              </div>
+            )}
+
+            {/* MLBB FORM */}
+            {gameTitle === 'lineups_mlbb' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5 border-b border-white/5 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                  <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-emerald-300">
+                    MLBB Lineups · Mobile MOBA Tryout Form
+                  </h4>
+                </div>
+                <Input name="mlbbIgn" label="IGN" placeholder="e.g. PlayerName" req onChange={handleChange} caps />
+                <Input name="mlbbUid" label="UID" placeholder="Your in-game UID" req onChange={handleChange} />
+                <Input name="mlbbRank" label="PLAYER RANK" placeholder="Current rank / peak rank" req onChange={handleChange} />
+                <Input name="mlbbFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
+                <Input name="mlbbPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
+                <Input name="mlbbEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
+                <Input name="mlbbEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
+                <Input name="mlbbDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
+                <TextArea
+                  name="mlbbWhy"
+                  label="Why you want to join Playstorm Lineups"
+                  placeholder="How do you approach your MLBB lane and teamfights?"
+                  req
+                  onChange={handleChange}
+                />
+                <TextArea
+                  name="mlbbExperience"
+                  label="Competitive Experience (optional)"
+                  placeholder="Short note on past ranks, squads, or custom tournament runs."
+                  onChange={handleChange}
+                  hint="Optional, but highly helpful for trial scouts."
+                />
+                <label className="flex items-start gap-2.5 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3.5 text-yellow-100 font-mono">
+                  <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
+                  <span>I confirm that I am available for lineup tryouts and competitive matches.</span>
+                </label>
+              </div>
+            )}
+
+            {/* FREE FIRE MAX FORM */}
+            {gameTitle === 'lineups_freefire_max' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5 border-b border-white/5 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+                  <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-purple-300">
+                    Free Fire MAX Lineups Tryout Form
+                  </h4>
+                </div>
+                <Input name="ffFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
+                <Input name="ffPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
+                <Input name="ffEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
+                <Input name="ffEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
+                <Input name="ffDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
+                <TextArea
+                  name="ffWhy"
+                  label="Why you want to join Playstorm Lineups"
+                  placeholder="Tell us how you approach FF MAX strategy and close-quarters combat."
+                  req
+                  onChange={handleChange}
+                />
+                <TextArea
+                  name="ffExperience"
+                  label="Competitive Experience (optional)"
+                  placeholder="Mention high-tier ranked grind, custom rooms, or events you’ve clutched."
+                  onChange={handleChange}
+                  hint="Optional, but highly helpful for trial scouts."
+                />
+                <label className="flex items-start gap-2.5 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3.5 text-yellow-100 font-mono">
+                  <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
+                  <span>I confirm that I am available for lineup tryouts and competitive matches.</span>
+                </label>
+              </div>
+            )}
+
+            {/* CS2 FORM */}
+            {gameTitle === 'lineups_cs2' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5 border-b border-white/5 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-lime-500 shadow-[0_0_8px_rgba(132,204,22,0.8)]" />
+                  <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-lime-300">
+                    CS2 Lineups · Tactical FPS Tryout Form
+                  </h4>
+                </div>
+                <Input name="cs2FullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
+                <Input name="cs2Phone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
+                <Input name="cs2Email" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
+                <Input name="cs2Enrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
+                <Input name="cs2DeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
+                <Input name="cs2Elo" label="ELO / Rank" placeholder="Your current ELO or rank" req onChange={handleChange} inputMode="numeric" />
+                <TextArea
+                  name="cs2Why"
+                  label="Why you want to join Playstorm Lineups"
+                  placeholder="What roles/maps are your comfort picks and how do you handle pressure rounds?"
+                  req
+                  onChange={handleChange}
+                />
+                <TextArea
+                  name="cs2Experience"
+                  label="Competitive Experience (optional)"
+                  placeholder="Mention LAN runs, Faceit stacks, or previous team setups."
+                  onChange={handleChange}
+                  hint="Optional, but highly helpful for trial scouts."
+                />
+                <Input name="cs2SteamUrl" label="Steam URL" placeholder="https://steamcommunity.com/id/..." type="url" req onChange={handleChange} />
+                <label className="flex items-start gap-2.5 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3.5 text-yellow-100 font-mono">
+                  <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
+                  <span>I confirm that I am available for lineup tryouts and competitive matches.</span>
+                </label>
+              </div>
+            )}
+
+            {/* CODM FORM */}
+            {gameTitle === 'lineups_codm' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5 border-b border-white/5 pb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-teal-500 shadow-[0_0_8px_rgba(20,184,166,0.8)]" />
+                  <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-teal-300">
+                    CODM Lineups · Mobile FPS Tryout Form
+                  </h4>
+                </div>
+                <Input name="codmIgn" label="IGN" placeholder="e.g. PlayerName" req onChange={handleChange} caps />
+                <Input name="codmUid" label="UID" placeholder="Your in-game UID" req onChange={handleChange} />
+                <Input name="codmRank" label="RANK (Current / Peak)" placeholder="e.g. Legendary / Grandmaster" req onChange={handleChange} />
+                <Input name="codmFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
+                <Input name="codmPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
+                <Input name="codmEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
+                <Input name="codmEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
+                <Input name="codmDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
+                <TextArea
+                  name="codmWhy"
+                  label="Why you want to join Playstorm Lineups"
+                  placeholder="What primary role do you play in CODM and how do you coordinate with your squad?"
+                  req
+                  onChange={handleChange}
+                />
+                <TextArea
+                  name="codmExperience"
+                  label="Competitive Experience (optional)"
+                  placeholder="Mention ranks, team scrims, or tournament history."
+                  onChange={handleChange}
+                  hint="Optional, but highly helpful for trial scouts."
+                />
+                <label className="flex items-start gap-2.5 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3.5 text-yellow-100 font-mono">
+                  <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
+                  <span>I confirm that I am available for lineup tryouts and competitive matches.</span>
+                </label>
+              </div>
+            )}
+
+            {/* STATUS ACTIONS */}
+            <div className="space-y-4 pt-4 border-t border-white/5 relative z-10">
+              {status === 'submitting' && (
+                <p className="text-center text-xs font-mono uppercase tracking-[0.18em] text-purple-300 animate-pulse">
+                  // TRANSMITTING YOUR COMPETITIVE APPLICATION TO PLAYSTORM HQ...
+                </p>
+              )}
+              {status === 'error' && (
+                <p className="rounded-xl border border-red-500/50 bg-[#1A0B10] px-4 py-2.5 text-center text-xs font-bold text-red-500 font-mono">
+                  ❌ APPLICATION TRANSMISSION FAILED. CORRECT FIELDS AND RESEND PAYLOAD.
+                </p>
+              )}
+
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <MagneticElement className="flex-1">
+                  <button
+                    type="submit"
+                    disabled={status === 'submitting' || status === 'success'}
+                    onClick={playTactileClick}
+                    className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 px-6 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-lg shadow-purple-500/20 hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed border border-white/10"
+                  >
+                    <Send className="w-3.5 h-3.5" /> {status === 'submitting' ? 'TRANSMITTING...' : 'SEND PROFILE'}
+                  </button>
+                </MagneticElement>
+                
+                <MagneticElement className="flex-1">
+                  <button
+                    type="button"
+                    onClick={() => { playTactileClick(); setGameTitle(''); setFormData({}); setStatus('idle') }}
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-6 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-gray-300 hover:bg-white/10 transition-colors"
+                  >
+                    ← BACK TO GRID
+                  </button>
+                </MagneticElement>
+              </div>
             </div>
-          )}
-
-          {/* VALORANT FORM */}
-          {gameTitle === 'lineups_valorant' && (
-            <div className="space-y-4">
-              <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-red-300">
-                Valorant Lineups · Tactical FPS
-              </h4>
-              <Input name="valoIgnTag" label="PLAYER IGN+Tag" placeholder="e.g. Player#1234" req onChange={handleChange} caps />
-              <Input name="valoRank" label="PLAYER RANK (Current / Peak)" placeholder="Current: ... | Peak: ..." req onChange={handleChange} />
-              <Input name="valoDiscordUserId" label="DISCORD UserID" placeholder="e.g. 1234567890" req onChange={handleChange} />
-              <Input name="valoRoles" label="Roles" placeholder="e.g. Duelist / Initiator / Controller" req onChange={handleChange} caps />
-              <Input name="valoFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
-              <Input name="valoPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
-              <Input name="valoEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
-              <Input name="valoEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
-              <Input name="valoDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
-              <Input name="valoTracker" label="Valo Tracker Link" placeholder="https://tracker.gg/valorant/..." type="url" req onChange={handleChange} />
-              <TextArea
-                name="valoWhy"
-                label="Why you want to be part of Lineups"
-                placeholder="What kind of role do you see yourself in and why this roster?"
-                req
-                onChange={handleChange}
-              />
-              <TextArea
-                name="valoExperience"
-                label="Experience (optional)"
-                placeholder="Any previous teams, scrims, or notable performances you’re proud of."
-                onChange={handleChange}
-                hint="Optional, but helps staff understand your level."
-              />
-              <label className="flex items-start gap-2 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3 text-yellow-100">
-                <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
-                <span>I confirm that I will follow training schedules and participate in matches when selected.</span>
-              </label>
-            </div>
-          )}
-
-          {/* DOTA 2 FORM */}
-          {gameTitle === 'lineups_dota2' && (
-            <div className="space-y-4">
-              <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-blue-300">
-                Dota 2 Lineups · MOBA
-              </h4>
-              <Input name="dotaIgn" label="IGN" placeholder="e.g. PlayerName" req onChange={handleChange} caps />
-              <Input name="dotaUid" label="UID" placeholder="Your in-game UID" req onChange={handleChange} />
-              <Input name="dotaRank" label="PLAYER RANK" placeholder="Current rank / peak rank" req onChange={handleChange} />
-              <Input name="dotaFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
-              <Input name="dotaPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
-              <Input name="dotaEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
-              <Input name="dotaEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
-              <Input name="dotaDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
-              <TextArea
-                name="dotaWhy"
-                label="Why you want to be part of Lineups"
-                placeholder="Share how you play around your team and what kind of player you are."
-                req
-                onChange={handleChange}
-              />
-              <TextArea
-                name="dotaExperience"
-                label="Experience (optional)"
-                placeholder="Mention past stacks, captaining experience, or tournaments played."
-                onChange={handleChange}
-                hint="Optional, but helps staff understand your level."
-              />
-              <label className="flex items-start gap-2 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3 text-yellow-100">
-                <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
-                <span>I confirm that I am available for lineup training and competitive matches.</span>
-              </label>
-            </div>
-          )}
-
-          {/* MLBB FORM */}
-          {gameTitle === 'lineups_mlbb' && (
-            <div className="space-y-4">
-              <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-emerald-300">
-                MLBB Lineups · Mobile MOBA
-              </h4>
-              <Input name="mlbbIgn" label="IGN" placeholder="e.g. PlayerName" req onChange={handleChange} caps />
-              <Input name="mlbbUid" label="UID" placeholder="Your in-game UID" req onChange={handleChange} />
-              <Input name="mlbbRank" label="PLAYER RANK" placeholder="Current rank / peak rank" req onChange={handleChange} />
-              <Input name="mlbbFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
-              <Input name="mlbbPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
-              <Input name="mlbbEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
-              <Input name="mlbbEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
-              <Input name="mlbbDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
-              <TextArea
-                name="mlbbWhy"
-                label="Why you want to be part of Lineups"
-                placeholder="How do you like to play MLBB and why this lineup fits you?"
-                req
-                onChange={handleChange}
-              />
-              <TextArea
-                name="mlbbExperience"
-                label="Experience (optional)"
-                placeholder="Short note on past ranks, squads, or tourneys you’ve played."
-                onChange={handleChange}
-                hint="Optional, but helps staff understand your level."
-              />
-              <label className="flex items-start gap-2 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3 text-yellow-100">
-                <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
-                <span>I confirm that I am available for lineup training and competitive matches.</span>
-              </label>
-            </div>
-          )}
-
-          {/* FREE FIRE MAX FORM */}
-          {gameTitle === 'lineups_freefire_max' && (
-            <div className="space-y-4">
-              <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-purple-300">
-                Free Fire MAX Lineups
-              </h4>
-              <Input name="ffFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
-              <Input name="ffPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
-              <Input name="ffEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
-              <Input name="ffEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
-              <Input name="ffDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
-              <TextArea
-                name="ffWhy"
-                label="Why you want to be part of Lineups"
-                placeholder="Tell us how you approach FF MAX and what kind of teammate you are."
-                req
-                onChange={handleChange}
-              />
-              <TextArea
-                name="ffExperience"
-                label="Experience (optional)"
-                placeholder="Mention ranked grind, customs, or events you’ve played."
-                onChange={handleChange}
-                hint="Optional, but helps staff understand your level."
-              />
-              <label className="flex items-start gap-2 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3 text-yellow-100">
-                <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
-                <span>I confirm that I am available for lineup training and competitive matches.</span>
-              </label>
-            </div>
-          )}
-
-          {/* CS2 FORM */}
-          {gameTitle === 'lineups_cs2' && (
-            <div className="space-y-4">
-              <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-lime-300">
-                CS2 Lineups · Tactical FPS
-              </h4>
-              <Input name="cs2FullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
-              <Input name="cs2Phone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
-              <Input name="cs2Email" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
-              <Input name="cs2Enrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
-              <Input name="cs2DeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
-              <Input name="cs2Elo" label="ELO / Rank" placeholder="Your current ELO or rank" req onChange={handleChange} inputMode="numeric" />
-              <TextArea
-                name="cs2Why"
-                label="Why you want to be part of Lineups"
-                placeholder="What roles/maps are your comfort picks and why do you want this lineup?"
-                req
-                onChange={handleChange}
-              />
-              <TextArea
-                name="cs2Experience"
-                label="Experience (optional)"
-                placeholder="LANs, Faceit, previous teams, or scrim history that shows your experience."
-                onChange={handleChange}
-                hint="Optional, but helps staff understand your level."
-              />
-              <Input name="cs2SteamUrl" label="Steam URL" placeholder="https://steamcommunity.com/id/..." type="url" req onChange={handleChange} />
-              <label className="flex items-start gap-2 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3 text-yellow-100">
-                <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
-                <span>I confirm that I am available for lineup training and competitive matches.</span>
-              </label>
-            </div>
-          )}
-
-          {/* CODM FORM */}
-          {gameTitle === 'lineups_codm' && (
-            <div className="space-y-4">
-              <h4 className="text-xs font-display font-semibold uppercase tracking-[0.22em] text-teal-300">
-                CODM Lineups · Mobile FPS
-              </h4>
-              <Input name="codmIgn" label="IGN" placeholder="e.g. PlayerName" req onChange={handleChange} caps />
-              <Input name="codmUid" label="UID" placeholder="Your in-game UID" req onChange={handleChange} />
-              <Input name="codmRank" label="RANK (Current / Peak)" placeholder="e.g. Legendary / Grandmaster" req onChange={handleChange} />
-              <Input name="codmFullName" label="Full Name" placeholder="" req onChange={handleChange} caps />
-              <Input name="codmPhone" label="Phone Number" placeholder="WhatsApp number" type="tel" inputMode="numeric" req onChange={handleChange} />
-              <Input name="codmEmail" label="Email ID" placeholder="you@example.com" type="email" req onChange={handleChange} />
-              <Input name="codmEnrollment" label="Enrollment" placeholder="Your enrollment ID" req onChange={handleChange} />
-              <Input name="codmDeptYear" label="Department+Year" placeholder="e.g. CSE, 2nd Year" req onChange={handleChange} caps />
-              <TextArea
-                name="codmWhy"
-                label="Why you want to be part of Lineups"
-                placeholder="What role do you play in CODM and how do you like to support your squad?"
-                req
-                onChange={handleChange}
-              />
-              <TextArea
-                name="codmExperience"
-                label="Experience (optional)"
-                placeholder="Mention ranks, scrims, or tournaments you’ve played."
-                onChange={handleChange}
-                hint="Optional, but helps staff understand your level."
-              />
-              <label className="flex items-start gap-2 text-xs rounded-lg border border-yellow-500/30 bg-yellow-900/20 p-3 text-yellow-100">
-                <input type="checkbox" name="lineupsAck" required onChange={handleChange} className="mt-0.5" />
-                <span>I confirm that I am available for lineup training and competitive matches.</span>
-              </label>
-            </div>
-          )}
-
-        {/* STATUS */}
-        {status === 'submitting' && (
-          <p className="text-center text-sm font-['Share_Tech_Mono',monospace] uppercase tracking-[0.18em] text-purple-300">
-            // TRANSMITTING YOUR APPLICATION TO HQ...
-          </p>
+          </motion.form>
         )}
-        {status === 'error' && (
-          <p className="rounded-lg border border-[#FF2D55]/50 bg-[#1A0B10] px-4 py-2 text-center text-sm font-bold text-[#FF2D55]">
-            ❌ TRANSMISSION FAILED — PLEASE REVIEW YOUR FIELDS AND TRY AGAIN.
-          </p>
-        )}
-
-        {/* SUBMIT */}
-        <motion.button
-          type="submit"
-          disabled={status === 'submitting' || status === 'success'}
-          whileHover={{ y: -1 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full rounded border border-purple-500 bg-[#120322] px-6 py-3 font-['Share_Tech_Mono',monospace] text-[12px] uppercase tracking-[0.24em] text-[#E8EEF4] transition hover:bg-purple-600/30 disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          {status === 'submitting' ? 'SENDING PAYLOAD...' : 'CONFIRM REGISTRATION'}
-        </motion.button>
-
-          {/* BACK */}
-      <button
-        type="button"
-        onClick={() => { setGameTitle(''); setFormData({}); setStatus('idle') }}
-        className="w-full rounded border border-purple-500/40 px-6 py-3 font-['Share_Tech_Mono',monospace] text-[11px] uppercase tracking-[0.22em] text-[#E8EEF4]/70 transition hover:border-purple-400 hover:text-[#E8EEF4]"
-      >
-        ← BACK TO GAME GRID
-      </button>
-        </motion.form>
-      )}
+      </AnimatePresence>
     </motion.div>
   )
 }
@@ -688,8 +720,8 @@ export default function Lineups() {
 function Input({ label, name, type = "text", placeholder, req = false, onChange, caps = false, pattern, maxLength, inputMode, hint }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[11px] font-['Share_Tech_Mono',monospace] uppercase tracking-[0.22em] text-purple-200">
-        {label} {req && <span className="text-[#FF2D55]">*</span>}
+      <label className="text-[10px] font-mono uppercase tracking-[0.22em] text-purple-200">
+        {label} {req && <span className="text-red-500">*</span>}
       </label>
       <input
         type={type}
@@ -703,9 +735,9 @@ function Input({ label, name, type = "text", placeholder, req = false, onChange,
           if (caps) e.target.value = e.target.value.toUpperCase()
           onChange(e)
         }}
-        className={`w-full rounded-2xl border border-purple-500/30 bg-black/50 px-3 py-2.5 text-sm text-[#E8EEF4] outline-none transition focus:border-purple-300 focus:bg-black/70 ${caps ? 'uppercase' : ''}`}
+        className={`w-full rounded-xl border border-white/10 bg-black/60 px-3.5 py-3 text-xs text-white outline-none transition focus:border-purple-500 focus:bg-black/80 font-mono ${caps ? 'uppercase' : ''}`}
       />
-      {hint && <p className="text-[11px] text-gray-400">{hint}</p>}
+      {hint && <p className="text-[10px] text-gray-500 font-mono mt-1">{hint}</p>}
     </div>
   )
 }
@@ -714,37 +746,17 @@ function Input({ label, name, type = "text", placeholder, req = false, onChange,
 function TextArea({ label, name, placeholder, req = false, onChange, hint }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[11px] font-['Share_Tech_Mono',monospace] uppercase tracking-[0.22em] text-purple-200">
-        {label} {req && <span className="text-[#FF2D55]">*</span>}
+      <label className="text-[10px] font-mono uppercase tracking-[0.22em] text-purple-200">
+        {label} {req && <span className="text-red-500">*</span>}
       </label>
       <textarea
         name={name}
         required={req}
         placeholder={placeholder}
         onChange={onChange}
-        className="w-full rounded-2xl border border-purple-500/30 bg-black/50 px-3 py-2.5 text-sm text-[#E8EEF4] outline-none transition min-h-[120px] resize-y focus:border-purple-300 focus:bg-black/70"
+        className="w-full rounded-xl border border-white/10 bg-black/60 px-3.5 py-3 text-xs text-white outline-none transition min-h-[110px] resize-y focus:border-purple-500 focus:bg-black/80 font-mono"
       />
-      {hint && <p className="text-[11px] text-gray-400">{hint}</p>}
-    </div>
-  )
-}
-
-// Player Fields Helper
-function PlayerFields({ title, ignName, fullNameName, phoneName, typeName, onChange, data, playerNum = 1, phoneRequired = false, requiredAll = false }) {
-  const isCaptain = playerNum === 1
-  const bgClass = isCaptain ? 'bg-white/10 border-purple-500/40 backdrop-blur-md' : 'bg-white/5 border-purple-500/25 backdrop-blur-md'
-  const isRequired = requiredAll ? true : playerNum === 1
-  const typeRequired = requiredAll ? true : playerNum === 1
-
-  return (
-    <div className={`p-4 rounded-xl border ${bgClass} space-y-3`}>
-      <h4 className="text-xs font-bold text-purple-300 uppercase">{title}</h4>
-      <div className="grid gap-4 md:grid-cols-2">
-        <Input name={fullNameName} label="Full Name" placeholder="" req={isRequired} onChange={onChange} caps />
-        <Input name={ignName} label="IGN" placeholder="In-Game Name" req={isRequired} onChange={onChange} />
-        <Input name={phoneName} label={`Player ${playerNum} Phone`} placeholder="WhatsApp Number" req={phoneRequired || isRequired || requiredAll} type="tel" inputMode="numeric" onChange={onChange} />
-        <Input name={typeName} label="Player Type" placeholder="e.g. Assaulter" req={typeRequired} onChange={onChange} caps />
-      </div>
+      {hint && <p className="text-[10px] text-gray-500 font-mono mt-1">{hint}</p>}
     </div>
   )
 }

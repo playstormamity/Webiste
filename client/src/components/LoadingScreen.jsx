@@ -7,28 +7,42 @@ export default function LoadingScreen() {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6, ease: 'easeInOut' }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-[#05010b] via-[#080013] to-[#05010b] overflow-hidden"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-[#090914] via-[#050508] to-[#090914] overflow-hidden"
     >
+      {/* Background Interactive Tech Patterns */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Subtle Tech Laser Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)] opacity-40 pointer-events-none" />
+
+        {/* Ambient Indigo & Royal Blue Glow Blobs */}
         <motion.div
           animate={{
-            scale: [1, 1.3, 1, 1.2, 1],
-            opacity: [0.3, 0.6, 0.4, 0.5, 0.3],
-            x: [-50, 50, -30, 30, -50],
-            y: [0, 20, -20, 10, 0],
+            scale: [1, 1.2, 1, 1.1, 1],
+            opacity: [0.35, 0.55, 0.45, 0.5, 0.35],
+            x: [-40, 40, -20, 20, -40],
+            y: [0, 15, -15, 10, 0],
           }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-purple-700/50 blur-[120px]"
+          className="absolute -left-32 top-10 h-[400px] w-[400px] rounded-full bg-indigo-800/30 blur-[130px]"
         />
         <motion.div
           animate={{
-            scale: [1, 1.4, 1, 1.3, 1],
-            opacity: [0.2, 0.5, 0.3, 0.4, 0.2],
-            x: [0, -40, 40, -20, 0],
-            y: [0, -30, 30, -10, 0],
+            scale: [1, 1.25, 1, 1.15, 1],
+            opacity: [0.25, 0.45, 0.35, 0.4, 0.25],
+            x: [0, -30, 30, -10, 0],
+            y: [0, -25, 25, -10, 0],
           }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-          className="absolute bottom-10 right-0 h-96 w-96 rounded-full bg-pink-500/40 blur-[140px]"
+          className="absolute bottom-10 right-0 h-[500px] w-[500px] rounded-full bg-blue-900/25 blur-[150px]"
+        />
+        {/* Center glowing backdrop behind logo */}
+        <motion.div
+          animate={{
+            scale: [1, 1.15, 1],
+            opacity: [0.4, 0.6, 0.4],
+          }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-indigo-500/10 blur-[160px]"
         />
       </div>
 
@@ -41,50 +55,54 @@ export default function LoadingScreen() {
         >
           {/* Glowing Circles behind logo */}
           <motion.div
-            animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4], rotate: [0, 360] }}
+            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/40 via-pink-500/40 to-purple-500/40 blur-3xl"
+            className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500/20 via-white/10 to-indigo-500/20 blur-3xl"
             style={{ width: '240px', height: '240px', margin: '-120px' }}
           />
           
+          {/* Main Card with silver outline and white/indigo shadow */}
           <motion.div
-            animate={{ boxShadow: ['0 0 30px rgba(139, 92, 246, 0.4)', '0 0 50px rgba(236, 72, 153, 0.5)', '0 0 30px rgba(139, 92, 246, 0.4)'] }}
+            animate={{ boxShadow: ['0 0 30px rgba(99, 102, 241, 0.15)', '0 0 50px rgba(255, 255, 255, 0.1)', '0 0 30px rgba(99, 102, 241, 0.15)'] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative flex h-36 w-36 items-center justify-center rounded-3xl bg-gradient-to-br from-black/80 via-black/60 to-black/80 backdrop-blur-xl border-2 border-purple-500/50 shadow-2xl"
+            className="relative flex h-36 w-36 items-center justify-center rounded-3xl bg-gradient-to-br from-zinc-950 via-black to-zinc-950 border border-white/10 shadow-2xl backdrop-blur-xl"
           >
+            {/* Shimmer line inside the card */}
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-transparent via-white/5 to-transparent animate-shimmer pointer-events-none" />
+
             <motion.img
               src={playstormLogo}
               alt="Loading"
               className="relative z-10 h-28 w-28 object-contain p-2"
-              animate={{ scale: [1, 1.08, 1], rotate: [0, 2, -2, 0] }}
+              animate={{ scale: [1, 1.05, 1], rotate: [0, 1, -1, 0] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
             />
           </motion.div>
         </motion.div>
 
-        <div className="text-center">
+        <div className="text-center space-y-1">
           <motion.h2
-            animate={{ backgroundPosition: ['0%', '100%', '0%'] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+            animate={{ backgroundPosition: ['0%', '200%', '0%'] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
             style={{ backgroundSize: '200% auto' }}
-            className="font-display text-3xl font-bold sm:text-4xl bg-gradient-to-r from-purple-400 via-pink-400 via-purple-300 to-purple-400 bg-clip-text text-transparent"
+            className="font-display text-4xl font-bold bg-gradient-to-r from-white via-indigo-200 to-slate-400 bg-clip-text text-transparent tracking-widest drop-shadow-md"
           >
             PLAYSTORM
           </motion.h2>
-          <p className="mt-3 font-display text-sm uppercase tracking-[0.4em] text-purple-300">ESPORTS CLUB</p>
+          <p className="font-display text-[10px] font-bold uppercase tracking-[0.45em] text-gray-400">ESPORTS CLUB</p>
         </div>
 
-        {/* Loading Bar */}
-        <div className="relative h-1.5 w-64 overflow-hidden rounded-full bg-black/60 border border-purple-500/40 shadow-lg">
+        {/* Premium Loading Bar */}
+        <div className="relative h-1.5 w-64 overflow-hidden rounded-full bg-black/60 border border-white/10 shadow-inner">
           <motion.div
-            className="h-full bg-gradient-to-r from-purple-500 via-pink-500 via-purple-500 to-pink-500"
+            className="h-full bg-gradient-to-r from-indigo-600 via-blue-400 to-indigo-600"
             style={{ backgroundSize: '200% 100%' }}
-            animate={{ width: ['0%', '100%'], backgroundPosition: ['0%', '100%'] }}
-            transition={{ width: { duration: 2, repeat: Infinity, ease: 'easeInOut' }, backgroundPosition: { duration: 1, repeat: Infinity, ease: 'linear' } }}
+            animate={{ width: ['0%', '100%'], backgroundPosition: ['0%', '200%'] }}
+            transition={{ width: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' }, backgroundPosition: { duration: 1.5, repeat: Infinity, ease: 'linear' } }}
           />
         </div>
         
-        <p className="text-xs uppercase tracking-[0.25em] text-gray-400 font-display">Loading...</p>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500 font-display animate-pulse">Initializing Client...</p>
       </div>
     </motion.div>
   )

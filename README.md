@@ -18,13 +18,20 @@
 
 ## 🚀 The Core Engine
 
-PlayStorm is built to be **fast, highly visual, and fully automated**. We ditched standard database setups to create an infrastructure that connects directly with our community tools.
+PlayStorm is built to be **fast, highly visual, and fully automated**. We ditched standard database setups to create a lightweight, high-performance infrastructure that connects directly with our community tools.
 
 ### 🔥 Key Features
 *   **Dynamic Discord Registration Webhooks**: Fully automated registration portals (`/s3`) that directly feed deeply structured embeds (with Riot IDs and BGMI UIDs) straight into designated Discord admin channels.
-*   **Live Instagram Scraping**: A custom, silent backend proxy that scrapes `@playstorm.amity` reel views, followers, and thumbnails **in real-time** without requiring official Meta API keys.
-*   **Automated Roster Sync**: A sleek roster directory that syncs automatically with a Google Sheet, parsing CSV data to pull active members, their roles, and their Discord avatars.
-*   **Cinematic UI/UX**: Built with Framer Motion and TailwindCSS, featuring extensive glassmorphism, heavy contrast gradients, and smooth scroll interactions.
+*   **Interactive 3D Cosmic Nebular Grid**: A high-performance `<canvas>` background layer drawing dynamic multi-frequency sine wave wireframes, cursor attraction gravity distortion, and particle stardust swarms. Throttles grid density dynamically on mobile to save CPU/GPU cycles and battery life.
+*   **Stale-While-Revalidate Caching**: Pre-fetches Google Sheets roster databases and Instagram feeds on server startup. Delivers cached payloads instantly (under 10ms!) in background threads with dynamic TTL-based refreshes, eliminating loading delays for visitors.
+*   **Webkit Rendering & Composition Fixes**: Handled browser composition bugs where nested/overlapping `backdrop-blur` filters under hardware-accelerated parent transitions caused player cards to render as solid black blocks in Brave and Safari. Replaced with highly premium, solid translucent dark glassmorphism backings (`bg-black/75`).
+*   **Real-Time Admin Telemetry Dashboard**: Access a looksmaxed system terminal at `/admin` (Tier 1 Secure auth displaying:
+    *   *Hardware Metrics*: Live average CPU load (flushing with M1 Pro core configurations) and host OS uptime.
+    *   *Backend Diagnostics*: Node.js process RSS memory footprint, JavaScript heap usage, runtime details, and process PID.
+    *   *Client Web App Metrics*: Dynamic client browser memory heap usage (`performance.memory.usedJSHeapSize`), interactive `requestAnimationFrame` canvas FPS counters (running at a fluid 60fps/120fps), initial page load speed, and screen sizes.
+    *   *API Cache Control Console*: Functional Cache refresh buttons (`Force Sync Roster`, `Force Sync Insta`) to trigger immediate, live API database refreshes on command.
+    *   *Secure Webhook Verification Matrix*: Confirms integrations of hidden Discord webhook channels configured inside `.env`.
+*   **Dynamic Navbar & Navigation Isolation**: When logged in as admin, the layout dynamically clears standard public links and restructures the header and mobile navigation to show only the administrative cockpit links (`Dashboard`, `Lineups`, `Leaderboard`, `Register`, `Pro Arena`, `Logout`) with no public clutter.
 
 ---
 

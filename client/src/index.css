@@ -13,7 +13,7 @@
   body {
     width: 100%;
     min-height: 100vh;
-    background: #05050F;
+    background: #060610;
   }
 
   body {
@@ -36,19 +36,19 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-primary to-pink bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent;
   }
 
   .glass {
-    @apply bg-white/5 backdrop-blur-lg border border-primary/30;
+    @apply bg-white/5 backdrop-blur-lg border border-white/10;
   }
 
   .glow {
-    box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
   }
 
   .glow-hover:hover {
-    box-shadow: 0 0 40px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
   }
 }
 
